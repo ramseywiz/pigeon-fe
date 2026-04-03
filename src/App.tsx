@@ -1,15 +1,36 @@
-import { Route, Routes } from 'react-router';
+import { Route, Routes, useNavigate } from 'react-router';
 import { LoginPage } from './pages/login/page';
-import { CallbackPage } from './pages/callback/page';
-import { AppPage } from './pages/dash/page';
+import { AppPage } from './pages/app/page';
+import { useEffect } from 'react';
+import { supabase } from './lib/supabase';
+
+export const AuthListener = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        navigate('/app');
+      }
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  return null;
+};
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/callback" element={<CallbackPage />} />
-      <Route path="/app" element={<AppPage />} />
-    </Routes>
+    <>
+      <AuthListener />
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/app" element={<AppPage />} />
+      </Routes>
+    </>
   );
 }
 
