@@ -1,9 +1,12 @@
 import styles from './navbar.module.css';
 import logo from '../assets/pigeon.png';
 import { supabase } from '../lib/supabase';
-import { Link } from 'react-router-dom';
 
-export const Navbar = () => {
+type NavbarProps = {
+  onHamburger: () => void;
+};
+
+export const Navbar = ({ onHamburger }: NavbarProps) => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     window.location.href = '/';
@@ -12,10 +15,13 @@ export const Navbar = () => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.left}>
+        <button onClick={onHamburger} className={styles.hamburger}>
+          <span />
+          <span />
+          <span />
+        </button>
         <img src={logo} alt="Pigeon" className={styles.logo} />
-        <Link to="/app">Home</Link>
-        <Link to="/app/add">Add</Link>
-        <Link to="/app/archive">Archive</Link>
+        Pigeon
       </div>
 
       <div className={styles.right}>
