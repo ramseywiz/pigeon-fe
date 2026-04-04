@@ -1,6 +1,7 @@
 import styles from './navbar.module.css';
 import logo from '../assets/pigeon.png';
 import { supabase } from '../lib/supabase';
+import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
   const handleLogout = async () => {
@@ -12,9 +13,9 @@ export const Navbar = () => {
     <nav className={styles.navbar}>
       <div className={styles.left}>
         <img src={logo} alt="Pigeon" className={styles.logo} />
-        <a href="/app">Home</a>
-        <a href="/app/add">Add</a>
-        <a href="/app/archive">Archive</a>
+        <Link to="/app">Home</Link>
+        <Link to="/app/add">Add</Link>
+        <Link to="/app/archive">Archive</Link>
       </div>
 
       <div className={styles.right}>

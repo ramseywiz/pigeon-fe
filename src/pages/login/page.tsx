@@ -3,37 +3,53 @@ import logo from '../../assets/pigeon_dark.png';
 import google from '../../assets/google.png';
 import { supabase } from '../../lib/supabase';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
-  const [isLogging, setIsLogging] = useState<boolean>(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [isLogging, setIsLogging] = useState(false);
+  const [authError, setAuthError] = useState('');
 
   useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        navigate('/app', { replace: true });
+      }
+    };
+
+    checkSession();
+
     const searchParams = new URLSearchParams(window.location.search);
-
-    const hashString = window.location.hash.startsWith('#')
-      ? window.location.hash.substring(1)
-      : window.location.hash;
-
-    const hashParams = new URLSearchParams(hashString);
+    const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
 
     const errorDescription =
       searchParams.get('error_description') || hashParams.get('error_description');
 
-    if (!errorDescription) return;
-
-    if (errorDescription?.includes('403')) {
-      setLoginError('Only CougarCS Google accounts are allowed.');
-    } else {
-      setLoginError(errorDescription);
+    if (errorDescription) {
+      setAuthError('You must sign in with a CougarCS Google account.');
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }, []);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        navigate('/app', { replace: true });
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   const handleLogin = async () => {
     setIsLogging(true);
-    setLoginError(null);
+    setAuthError('');
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -43,7 +59,7 @@ export const LoginPage = () => {
     });
 
     if (error) {
-      setLoginError(error.message);
+      setAuthError(error.message);
       setIsLogging(false);
     }
   };
@@ -62,7 +78,7 @@ export const LoginPage = () => {
           Continue with Google
         </button>
 
-        {loginError && <p className={styles.errorMessage}>{loginError}</p>}
+        {authError && <p className={styles.errorMessage}>{authError}</p>}
       </main>
 
       <footer className={styles.loginFooter}>

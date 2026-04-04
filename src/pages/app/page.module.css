@@ -1,0 +1,13 @@
+.homeTitle {
+  text-align: left;
+  width: 100%;
+  margin-left: 40px;
+  margin-top: 32px;
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}

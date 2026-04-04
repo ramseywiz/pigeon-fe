@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { Navbar } from '../../components/navbar.';
+import { Navbar } from '../../components/navbar';
+import styles from './page.module.css';
 
 export const AppPage = () => {
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,11 @@ export const AppPage = () => {
   return (
     <>
       <Navbar />
+      <div className={styles.appContainer}>
+        <h1 className={styles.homeTitle}>Event List</h1>
+        <button className={styles.addBtn}>Add Event</button>
+        // table
+      </div>
     </>
   );
 };
