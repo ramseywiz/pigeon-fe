@@ -2,22 +2,48 @@ import styles from './page.module.css';
 import logo from '../../assets/pigeon_dark.png';
 import google from '../../assets/google.png';
 import { supabase } from '../../lib/supabase';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const LoginPage = () => {
   const [isLogging, setIsLogging] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const hashString = window.location.hash.startsWith('#')
+      ? window.location.hash.substring(1)
+      : window.location.hash;
+
+    const hashParams = new URLSearchParams(hashString);
+
+    const errorDescription =
+      searchParams.get('error_description') || hashParams.get('error_description');
+
+    if (!errorDescription) return;
+
+    if (errorDescription?.includes('403')) {
+      setLoginError('Only CougarCS Google accounts are allowed.');
+    } else {
+      setLoginError(errorDescription);
+    }
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }, []);
 
   const handleLogin = async () => {
     setIsLogging(true);
+    setLoginError(null);
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `window.location.origin`,
+        redirectTo: window.location.origin,
       },
     });
 
     if (error) {
-      console.error('Error during login:', error.message);
+      setLoginError(error.message);
       setIsLogging(false);
     }
   };
@@ -35,6 +61,8 @@ export const LoginPage = () => {
           <img src={google} alt="Google logo" className={styles.googleIcon} />
           Continue with Google
         </button>
+
+        {loginError && <p className={styles.errorMessage}>{loginError}</p>}
       </main>
 
       <footer className={styles.loginFooter}>
