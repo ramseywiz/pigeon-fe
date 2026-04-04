@@ -1,0 +1,57 @@
+.navbar {
+  height: 64px;
+  background: var(--text);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.left a,
+.logout {
+  color: var(--bg);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.18px;
+}
+
+.left a {
+  transition: opacity 0.15s ease;
+}
+
+.left a:hover,
+.logout:hover {
+  opacity: 0.8;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logout {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.logo {
+  height: 28px;
+  width: auto;
+  display: block;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { Navbar } from '../../components/navbar.';
 
 export const AppPage = () => {
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ export const AppPage = () => {
 
   return (
     <>
-      <p>app page</p>
+      <Navbar />
     </>
   );
 };
