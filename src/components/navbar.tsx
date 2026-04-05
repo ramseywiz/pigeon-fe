@@ -17,10 +17,10 @@ export const Navbar = ({ onHamburger }: NavbarProps) => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.left}>
+        <img src={logo} alt="Pigeon" className={styles.logo} />
         <button onClick={onHamburger} className={styles.hamburger}>
           <img src={hamburger} alt="Menu" className={styles.hamburgerIcon} />
         </button>
-        <img src={logo} alt="Pigeon" className={styles.logo} />
       </div>
 
       <div className={styles.right}>
