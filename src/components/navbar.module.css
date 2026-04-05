@@ -1,0 +1,65 @@
+.navbar {
+  height: 64px;
+  background: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.hamburger {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger:hover,
+.logout:hover {
+  opacity: 0.8;
+}
+
+.hamburgerIcon,
+.logoutIcon {
+  display: block;
+  filter: invert(86%) sepia(3%) saturate(1762%) hue-rotate(324deg) brightness(118%) contrast(90%);
+}
+
+.hamburgerIcon {
+  width: 22px;
+  height: 22px;
+}
+
+.logoutIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.logout {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.logo {
+  height: 28px;
+  width: auto;
+  display: block;
+}

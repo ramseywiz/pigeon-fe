@@ -1,7 +1,7 @@
 .loginPage {
   min-height: 100vh;
-  background: #f2efe5;
-  color: #755540;
+  background: var(--bg);
+  color: var(--text);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -31,14 +31,14 @@
   font-size: 56px;
   line-height: 1.05;
   font-weight: 700;
-  color: #755540;
+  color: var(--text);
 }
 
 .loginSubtext {
   margin: 0 0 32px;
   font-size: 22px;
   line-height: 1.4;
-  color: #755540;
+  color: var(--text);
   opacity: 0.9;
 }
 
@@ -46,10 +46,10 @@
   width: 100%;
   max-width: 420px;
   height: 56px;
-  border: 2px solid #755540;
+  border: 2px solid var(--text);
   border-radius: 12px;
-  background: #f2efe5;
-  color: #755540;
+  background: var(--bg);
+  color: var(--text);
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;
@@ -62,7 +62,7 @@
 }
 
 .googleBtn:hover {
-  background: #efe9dc;
+  background: var(--code-bg);
 }
 
 .googleBtn:active {
@@ -76,7 +76,7 @@
 
 .errorMessage {
   margin: 12px 0;
-  color: #ff6b6b;
+  color: rgb(255, 0, 0);
   text-align: center;
   font-weight: bold;
 }
@@ -89,13 +89,13 @@
 }
 
 .loginFooter a {
-  color: #755540;
+  color: var(--text);
   text-decoration: none;
   font-weight: 500;
 }
 
 .loginFooter span {
-  color: #014592;
+  color: rgb(0, 153, 255);
 }
 
 .loginFooter a:hover span {

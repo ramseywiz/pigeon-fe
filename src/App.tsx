@@ -1,36 +1,21 @@
-import { Route, Routes, useNavigate } from 'react-router';
+import { Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/login/page';
 import { AppPage } from './pages/app/page';
-import { useEffect } from 'react';
-import { supabase } from './lib/supabase';
+import { ArchivePage } from './pages/archive/page';
+import { AllCommunityModule } from 'ag-grid-community';
+import { AgGridProvider } from 'ag-grid-react';
 
-export const AuthListener = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        navigate('/app');
-      }
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, []);
-
-  return null;
-};
+const modules = [AllCommunityModule];
 
 function App() {
   return (
-    <>
-      <AuthListener />
+    <AgGridProvider modules={modules}>
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/app" element={<AppPage />} />
+        <Route path="/app/archive" element={<ArchivePage />} />
       </Routes>
-    </>
+    </AgGridProvider>
   );
 }
 
