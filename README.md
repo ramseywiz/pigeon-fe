@@ -2,4 +2,4 @@ the idea here is to be able to login with a CCS account, and then upload event d
 
 you will be greeted with a dashboard of your current events. you are able to perform all CRUD operations with events.
 
-the cougarCS bot will run a CRON job every morning to post an announcement for they day's event, and one on Saturday to announce next week's events. we can make a separate bot if needed.
+on event upload, the API will create tasks for the morning of the event and 30 minutes before the event start to POST our cougarCS webhook.
