@@ -1,6 +1,8 @@
 import styles from './navbar.module.css';
 import logo from '../assets/pigeon.png';
+import logout from '../assets/logout.svg';
 import { supabase } from '../lib/supabase';
+import hamburger from '../assets/hamburger.svg';
 
 type NavbarProps = {
   onHamburger: () => void;
@@ -16,17 +18,14 @@ export const Navbar = ({ onHamburger }: NavbarProps) => {
     <nav className={styles.navbar}>
       <div className={styles.left}>
         <button onClick={onHamburger} className={styles.hamburger}>
-          <span />
-          <span />
-          <span />
+          <img src={hamburger} alt="Menu" className={styles.hamburgerIcon} />
         </button>
         <img src={logo} alt="Pigeon" className={styles.logo} />
-        Pigeon
       </div>
 
       <div className={styles.right}>
         <button onClick={handleLogout} className={styles.logout}>
-          Logout
+          <img src={logout} className={styles.logoutIcon} alt="Logout" />
         </button>
       </div>
     </nav>

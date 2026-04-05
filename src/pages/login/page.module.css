@@ -76,7 +76,7 @@
 
 .errorMessage {
   margin: 12px 0;
-  color: var(--accent);
+  color: rgb(255, 0, 0);
   text-align: center;
   font-weight: bold;
 }
@@ -95,7 +95,7 @@
 }
 
 .loginFooter span {
-  color: var(--accent);
+  color: rgb(0, 153, 255);
 }
 
 .loginFooter a:hover span {

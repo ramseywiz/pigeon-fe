@@ -33,7 +33,7 @@
 
 .cardTitle {
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
   color: var(--text-h);
   line-height: 1;
@@ -47,7 +47,7 @@
   padding: 10px 20px;
   font-family: var(--sans);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: bold;
   cursor: pointer;
   transition: opacity 0.15s ease;
 }

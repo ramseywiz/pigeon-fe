@@ -4,35 +4,33 @@ import { supabase } from '../../lib/supabase';
 import { Navbar } from '../../components/navbar';
 import styles from './page.module.css';
 import { LeftNav } from '../../components/leftnav';
-import { EventGrid } from '../../components/eventgrid';
+import { EventGrid } from '../../components/eventgrid/eventgrid';
+import { AddEventDialog } from '../../components/addeventdialog/addeventdialog';
 
 export const AppPage = () => {
   const [loading, setLoading] = useState(true);
   const [isAuthed, setIsAuthed] = useState(false);
   const [navOpen, setNavOpen] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const checkUser = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-
       setIsAuthed(!!session);
       setLoading(false);
     };
-
     checkUser();
   }, []);
 
   if (loading) return <p>Loading...</p>;
-
-  if (!isAuthed) {
-    return <Navigate to="/" replace />;
-  }
+  if (!isAuthed) return <Navigate to="/" replace />;
 
   return (
     <>
       <Navbar onHamburger={() => setNavOpen((o) => !o)} />
+      <AddEventDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
       <div className={styles.pageBody}>
         <LeftNav
           open={navOpen}
@@ -45,7 +43,9 @@ export const AppPage = () => {
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <h1 className={styles.cardTitle}>Event List</h1>
-              <button className={styles.addBtn}>+ ADD</button>
+              <button className={styles.addBtn} onClick={() => setDialogOpen(true)}>
+                + ADD EVENT
+              </button>
             </div>
             <div className={styles.cardBody}>
               <EventGrid />
