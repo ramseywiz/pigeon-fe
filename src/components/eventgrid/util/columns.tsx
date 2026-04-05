@@ -32,7 +32,7 @@ export const useColumns = () => {
         },
       },
       {
-        field: 'date',
+        field: 'startDate',
         headerName: 'Date & Time',
         flex: 1,
         cellDataType: 'dateTime',
