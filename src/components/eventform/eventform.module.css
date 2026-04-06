@@ -64,6 +64,121 @@
   gap: 14px;
 }
 
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.row .field {
+  flex: 1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.input {
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: var(--sans);
+  background: #faf8f4;
+  color: var(--text-h);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
+
+.input:focus {
+  border-color: var(--text);
+}
+
+.textarea {
+  height: 80px;
+  resize: vertical;
+}
+
+.checkboxField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 22px;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--text-h);
+  cursor: pointer;
+}
+
+.uploadArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed var(--border);
+  border-radius: 6px;
+  background: #faf8f4;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+  overflow: hidden;
+  min-height: 100px;
+}
+
+.uploadArea:hover {
+  border-color: var(--text);
+  background: #f5f1ea;
+}
+
+.uploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text);
+  opacity: 0.6;
+  font-size: 14px;
+  padding: 24px;
+}
+
+.uploadPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+}
+
+.previewImg {
+  max-height: 120px;
+  max-width: 100%;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.uploadFileName {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+.hiddenInput {
+  display: none;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;

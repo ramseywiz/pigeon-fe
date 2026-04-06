@@ -1,41 +1,38 @@
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { useMemo } from 'react';
-import type { EventListRow } from '../models/models';
+import type { EventDto } from '../../../api/events/eventDto';
 
-export const useColumns = () => {
-  const columns: ColDef<EventListRow>[] = useMemo(
+export const useColumns = (onEdit: (event: EventDto) => void) => {
+  const columns: ColDef<EventDto>[] = useMemo(
     () => [
       {
         field: 'eventName',
         headerName: 'Event Name',
         flex: 1,
         filter: true,
-        cellRenderer: (params: ICellRendererParams<EventListRow>) => {
-          return (
-            <button
-              onClick={() => console.log('open dialog for', params.data)}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                color: '#4a3526',
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                fontSize: 'inherit',
-                fontFamily: 'inherit',
-                fontWeight: 'inherit',
-              }}
-            >
-              {params.value}
-            </button>
-          );
-        },
+        cellRenderer: (params: ICellRendererParams<EventDto>) => (
+          <button
+            onClick={() => params.data && onEdit(params.data)}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              color: '#4a3526',
+              cursor: 'pointer',
+              textDecoration: 'underline',
+              fontSize: 'inherit',
+              fontFamily: 'inherit',
+              fontWeight: 'inherit',
+            }}
+          >
+            {params.value}
+          </button>
+        ),
       },
       {
         field: 'startDate',
-        headerName: 'Date & Time',
+        headerName: 'Start Date & Time',
         flex: 1,
-        cellDataType: 'dateTime',
         valueFormatter: (params) => {
           if (!params.value) return '';
           return new Intl.DateTimeFormat('en-US', {
@@ -44,7 +41,7 @@ export const useColumns = () => {
             year: 'numeric',
             hour: 'numeric',
             minute: '2-digit',
-          }).format(params.value);
+          }).format(new Date(`${params.value}T${params.data?.startTime}`));
         },
       },
       {
@@ -58,6 +55,11 @@ export const useColumns = () => {
         headerName: 'Branch',
         flex: 1,
         filter: true,
+      },
+      {
+        field: 'food',
+        headerName: 'Food',
+        flex: 0.5,
       },
     ],
     [],

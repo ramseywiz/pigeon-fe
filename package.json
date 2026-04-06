@@ -17,11 +17,13 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
     "@supabase/supabase-js": "^2.101.1",
     "ag-grid-community": "^35.2.0",
     "ag-grid-react": "^35.2.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.2"
   },
   "devDependencies": {
