@@ -1,13 +1,13 @@
-export interface EventListRow {
+export interface EventDto {
   id: string;
   eventName: string;
-  startDate: Date;
+  startDate: string;
   startTime: string;
-  endDate: Date;
+  endDate: string;
   endTime: string;
   location: string;
   branch: string;
   description: string;
   food: boolean;
-  imageUrl: File | null;
+  imageUrl: string | null;
 }

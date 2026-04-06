@@ -1,8 +1,17 @@
+import { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { themeQuartz } from 'ag-grid-community';
 import styles from './eventgrid.module.css';
-import type { EventListRow } from './models/models';
 import { useColumns } from './util/columns';
+import {
+  fetchEvents,
+  selectEvents,
+  selectEventsLoading,
+  selectEventsError,
+} from '../../store/eventSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import type { EventDto } from '../../api/events/eventDto';
+import { EditEventDialog } from '../editeventdialog';
 
 const myTheme = themeQuartz.withParams({
   borderColor: '#d4cdc2',
@@ -22,46 +31,42 @@ const myTheme = themeQuartz.withParams({
   headerColumnResizeHandleColor: '#755540',
 });
 
-const placeholderRows: EventListRow[] = [
-  {
-    id: '1',
-    eventName: 'teachhouston Info Session',
-    startDate: new Date('2025-05-03T10:00:00'),
-    startTime: '10:00',
-    endDate: new Date('2025-05-03T11:00:00'),
-    endTime: '11:00',
-    location: 'PGH 232',
-    branch: 'Main',
-    description: 'Join us for an info session about teachhouston!',
-    food: true,
-    imageUrl: null,
-  },
-  {
-    id: '2',
-    eventName: 'Nvidia Info Session',
-    startDate: new Date('2025-05-03T10:00:00'),
-    startTime: '10:00',
-    endDate: new Date('2025-05-03T11:00:00'),
-    endTime: '11:00',
-    location: 'PGH 563',
-    branch: 'Main',
-    description: 'Join us for an info session about Nvidia!',
-    food: false,
-    imageUrl: null,
-  },
-];
-
 export const EventGrid = () => {
-  const columns = useColumns();
-  const rows = placeholderRows; // in the future, we will replace this with an API call. or maybe even Redux store? maybe redux so we can cache it and not have to worry about refetching every time we navigate away from the page, as well as share the data with the calendar. we'll see
+  const dispatch = useAppDispatch();
+  const events = useAppSelector(selectEvents);
+  const loading = useAppSelector(selectEventsLoading);
+  const error = useAppSelector(selectEventsError);
+
+  const [selectedEvent, setSelectedEvent] = useState<EventDto | null>(null);
+
+  const columns = useColumns((event) => setSelectedEvent(event));
+
+  useEffect(() => {
+    if (events.length === 0) {
+      dispatch(fetchEvents());
+    }
+  }, [dispatch]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
-    <div className={styles.grid}>
-      <AgGridReact
-        theme={myTheme}
-        rowData={rows}
-        columnDefs={columns}
-        defaultColDef={{ cellStyle: { textAlign: 'left' } }}
-      />
-    </div>
+    <>
+      <div className={styles.grid}>
+        <AgGridReact
+          theme={myTheme}
+          rowData={events}
+          columnDefs={columns}
+          defaultColDef={{ cellStyle: { textAlign: 'left' } }}
+        />
+      </div>
+      {selectedEvent && (
+        <EditEventDialog
+          open={selectedEvent !== null}
+          onClose={() => setSelectedEvent(null)}
+          event={selectedEvent}
+        />
+      )}
+    </>
   );
 };
