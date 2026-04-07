@@ -97,3 +97,13 @@ export const updateEvent = async (id: string, form: EventFormState): Promise<Eve
   if (!response.ok) throw new Error('Failed to update event');
   return response.json();
 };
+
+export const deleteEvents = async (ids: string[]): Promise<void> => {
+  const headers = await getAuthHeader();
+  const response = await fetch(`${API_URL}/api/events`, {
+    method: 'DELETE',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify(ids),
+  });
+  if (!response.ok) throw new Error('Failed to delete events');
+};

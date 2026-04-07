@@ -56,7 +56,7 @@ export const EditEventDialog = ({ open, onClose, event }: EditEventDialogProps) 
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
         <div className={styles.dialogHeader}>
-          <h2 className={styles.title}>Edit Event</h2>
+          <h2 className={styles.title}>View/Edit Event</h2>
         </div>
         <div className={styles.dialogBody}>
           <EventForm

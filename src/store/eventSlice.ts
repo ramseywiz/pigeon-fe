@@ -3,6 +3,7 @@ import {
   getEvents,
   createEvent,
   updateEvent as updateEventService,
+  deleteEvents as deleteEventsService,
 } from '../api/events/eventService';
 import type { EventDto } from '../api/events/eventDto';
 import type { RootState } from './store';
@@ -35,6 +36,11 @@ export const updateEvent = createAsyncThunk(
   },
 );
 
+export const deleteEvents = createAsyncThunk('events/delete', async (ids: string[]) => {
+  await deleteEventsService(ids);
+  return ids;
+});
+
 const eventsSlice = createSlice({
   name: 'events',
   initialState,
@@ -59,6 +65,9 @@ const eventsSlice = createSlice({
       .addCase(updateEvent.fulfilled, (state, action) => {
         const index = state.events.findIndex((e) => e.id === action.payload.id);
         if (index !== -1) state.events[index] = action.payload;
+      })
+      .addCase(deleteEvents.fulfilled, (state, action) => {
+        state.events = state.events.filter((e) => !action.payload.includes(e.id));
       });
   },
 });
