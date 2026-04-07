@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './eventform.module.css';
 import type { EventDto } from '../../api/events/eventDto';
+import type { EventFormErrors } from '../../lib/eventValidation';
 
 export interface EventFormState {
   eventName: string;
@@ -44,13 +45,32 @@ export const formStateFromDto = (event: EventDto): EventFormState => ({
   imageUrl: event.imageUrl,
 });
 
+type TouchedFields = Partial<Record<keyof EventFormState, boolean>>;
+
 interface EventFormProps {
   form: EventFormState;
   onChange: (form: EventFormState) => void;
+  errors?: EventFormErrors;
+  submitAttempted?: boolean;
 }
 
-export const EventForm = ({ form, onChange }: EventFormProps) => {
+const pushTimeBy90Minutes = (time: string): string => {
+  if (!time) return '';
+  const [hours, minutes] = time.split(':').map(Number);
+  const totalMinutes = hours * 60 + minutes + 90;
+  const newHours = Math.floor(totalMinutes / 60) % 24;
+  const newMinutes = totalMinutes % 60;
+  return `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
+};
+
+export const EventForm = ({
+  form,
+  onChange,
+  errors = {},
+  submitAttempted = false,
+}: EventFormProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [touched, setTouched] = useState<TouchedFields>({});
 
   useEffect(() => {
     if (!form.image) {
@@ -65,7 +85,18 @@ export const EventForm = ({ form, onChange }: EventFormProps) => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
-    onChange({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const updated = { ...form, [name]: value };
+
+    if (name === 'startDate' && !form.endDate) {
+      updated.endDate = value;
+    }
+
+    if (name === 'startTime' && !form.endTime) {
+      updated.endTime = pushTimeBy90Minutes(value);
+    }
+
+    onChange(updated);
   };
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,39 +108,60 @@ export const EventForm = ({ form, onChange }: EventFormProps) => {
     onChange({ ...form, image: file });
   };
 
+  const handleBlur = (field: keyof EventFormState) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const errorFor = (field: keyof EventFormErrors): string | undefined => {
+    if (submitAttempted || touched[field]) return errors[field];
+  };
+
+  const inputClass = (field: keyof EventFormErrors) =>
+    [styles.input, errorFor(field) ? styles.inputError : ''].filter(Boolean).join(' ');
+
   return (
     <>
       <div className={styles.field}>
         <label className={styles.label}>Event Name</label>
         <input
-          className={styles.input}
+          className={inputClass('eventName')}
           name="eventName"
           value={form.eventName}
           onChange={handleChange}
+          onBlur={() => handleBlur('eventName')}
           placeholder="e.g. Nvidia Info Session"
         />
+        {errorFor('eventName') && <span className={styles.errorText}>{errorFor('eventName')}</span>}
       </div>
 
       <div className={styles.row}>
         <div className={styles.field}>
           <label className={styles.label}>Start Date</label>
           <input
-            className={styles.input}
+            className={inputClass('startDate')}
             name="startDate"
             type="date"
             value={form.startDate}
             onChange={handleChange}
+            onBlur={() => handleBlur('startDate')}
           />
+          {errorFor('startDate') && (
+            <span className={styles.errorText}>{errorFor('startDate')}</span>
+          )}
         </div>
         <div className={styles.field}>
           <label className={styles.label}>Start Time</label>
           <input
-            className={styles.input}
+            className={inputClass('startTime')}
             name="startTime"
             type="time"
             value={form.startTime}
             onChange={handleChange}
+            onBlur={() => handleBlur('startTime')}
           />
+          {errorFor('startTime') && (
+            <span className={styles.errorText}>{errorFor('startTime')}</span>
+          )}
         </div>
       </div>
 
@@ -117,22 +169,26 @@ export const EventForm = ({ form, onChange }: EventFormProps) => {
         <div className={styles.field}>
           <label className={styles.label}>End Date</label>
           <input
-            className={styles.input}
+            className={inputClass('endDate')}
             name="endDate"
             type="date"
             value={form.endDate}
             onChange={handleChange}
+            onBlur={() => handleBlur('endDate')}
           />
+          {errorFor('endDate') && <span className={styles.errorText}>{errorFor('endDate')}</span>}
         </div>
         <div className={styles.field}>
           <label className={styles.label}>End Time</label>
           <input
-            className={styles.input}
+            className={inputClass('endTime')}
             name="endTime"
             type="time"
             value={form.endTime}
             onChange={handleChange}
+            onBlur={() => handleBlur('endTime')}
           />
+          {errorFor('endTime') && <span className={styles.errorText}>{errorFor('endTime')}</span>}
         </div>
       </div>
 
@@ -140,12 +196,14 @@ export const EventForm = ({ form, onChange }: EventFormProps) => {
         <div className={styles.field}>
           <label className={styles.label}>Location</label>
           <input
-            className={styles.input}
+            className={inputClass('location')}
             name="location"
             value={form.location}
             onChange={handleChange}
+            onBlur={() => handleBlur('location')}
             placeholder="e.g. PGH 232"
           />
+          {errorFor('location') && <span className={styles.errorText}>{errorFor('location')}</span>}
         </div>
         <div className={styles.checkboxField}>
           <input
@@ -164,24 +222,35 @@ export const EventForm = ({ form, onChange }: EventFormProps) => {
 
       <div className={styles.field}>
         <label className={styles.label}>Branch</label>
-        <select className={styles.input} name="branch" value={form.branch} onChange={handleChange}>
+        <select
+          className={inputClass('branch')}
+          name="branch"
+          value={form.branch}
+          onChange={handleChange}
+          onBlur={() => handleBlur('branch')}
+        >
           <option value="">Select a branch</option>
           <option value="Main">Main</option>
           <option value="WebDev">WebDev</option>
           <option value="InfoSec">InfoSec</option>
           <option value="Tutoring">Tutoring</option>
         </select>
+        {errorFor('branch') && <span className={styles.errorText}>{errorFor('branch')}</span>}
       </div>
 
       <div className={styles.field}>
         <label className={styles.label}>Description</label>
         <textarea
-          className={`${styles.input} ${styles.textarea}`}
+          className={`${inputClass('description')} ${styles.textarea}`}
           name="description"
           value={form.description}
           onChange={handleChange}
+          onBlur={() => handleBlur('description')}
           placeholder="This will show up in the announcement!"
         />
+        {errorFor('description') && (
+          <span className={styles.errorText}>{errorFor('description')}</span>
+        )}
       </div>
 
       <div className={styles.field}>
@@ -204,6 +273,7 @@ export const EventForm = ({ form, onChange }: EventFormProps) => {
             className={styles.hiddenInput}
           />
         </label>
+        {errorFor('image') && <span className={styles.errorText}>{errorFor('image')}</span>}
       </div>
     </>
   );

@@ -34,7 +34,7 @@
 .dialog {
   background: #ebe7db;
   border: 1.5px solid var(--border);
-  width: 640px;
+  width: 700px;
   max-width: 95vw;
   max-height: 90vh;
   display: flex;
