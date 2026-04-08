@@ -5,6 +5,7 @@ import type { EventDto } from '../../api/events/eventDto';
 import type { EventFormErrors } from '../../lib/eventValidation';
 
 const ExpandIcon = () => (
+  // i copied this svg's text and then never saved it. i cannot find the svg so this will have to do.
   <svg
     width="13"
     height="13"

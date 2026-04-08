@@ -1,8 +1,8 @@
 import styles from './navbar.module.css';
-import logo from '../assets/pigeon.png';
-import logout from '../assets/logout.svg';
-import { supabase } from '../lib/supabase';
-import hamburger from '../assets/hamburger.svg';
+import logo from '../../assets/pigeon.png';
+import logout from '../../assets/logout.svg';
+import hamburger from '../../assets/hamburger.svg';
+import { supabase } from '../../lib/supabase';
 
 type NavbarProps = {
   onHamburger: () => void;

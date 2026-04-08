@@ -1,9 +1,9 @@
 import { useState, type ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
-import { Navbar } from '../navbar';
-import { LeftNav } from '../leftnav';
+import { LeftNav } from '../leftnav/leftnav';
 import styles from './eventpagelayout.module.css';
+import { Navbar } from '../navbar/navbar';
 
 const NAV_LINKS = [
   { label: 'Event List', to: '/app' },
