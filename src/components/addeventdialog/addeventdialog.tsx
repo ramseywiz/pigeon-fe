@@ -5,6 +5,7 @@ import { useAppDispatch } from '../../store/hooks';
 import { addEvent } from '../../store/eventSlice';
 import { defaultFormState, EventForm, type EventFormState } from '../eventform/eventform';
 import { getEventFormErrors } from '../../lib/eventValidation';
+import { useNotification } from '../../notifications/useNotification';
 
 interface AddEventDialogProps {
   open: boolean;
@@ -13,6 +14,7 @@ interface AddEventDialogProps {
 
 export const AddEventDialog = ({ open, onClose }: AddEventDialogProps) => {
   const dispatch = useAppDispatch();
+  const { notify } = useNotification();
   const [form, setForm] = useState<EventFormState>(defaultFormState);
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const errors = getEventFormErrors(form);
@@ -24,14 +26,18 @@ export const AddEventDialog = ({ open, onClose }: AddEventDialogProps) => {
   };
 
   const handleSubmit = async () => {
-    try {
-      setSubmitAttempted(true);
-      if (Object.keys(errors).length > 0) return;
+    setSubmitAttempted(true);
+    if (Object.keys(errors).length > 0) return;
 
-      handleClose();
+    const name = form.eventName;
+    handleClose();
+
+    const resolve = notify(`Adding "${name}"...`);
+    try {
       await dispatch(addEvent(form)).unwrap();
-    } catch (err) {
-      console.error('Failed to create event:', err);
+      resolve('success', `Added "${name}" successfully!`);
+    } catch {
+      resolve('error', `Failed to add "${name}".`);
     }
   };
 

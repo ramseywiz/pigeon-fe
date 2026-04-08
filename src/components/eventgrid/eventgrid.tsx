@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { themeQuartz } from 'ag-grid-community';
 import styles from './eventgrid.module.css';
@@ -45,10 +45,13 @@ export const EventGrid = ({ onSelectionChanged, filterFn, readonly = false }: Ev
 
   const [selectedEvent, setSelectedEvent] = useState<EventDto | null>(null);
 
-  const handleEdit = readonly ? undefined : (event: EventDto) => setSelectedEvent(event);
-  const columns = useColumns(handleEdit);
+  const handleEdit = useCallback((event: EventDto) => setSelectedEvent(event), []);
+  const columns = useColumns(readonly ? undefined : handleEdit);
 
-  const events = filterFn ? allEvents.filter(filterFn) : allEvents;
+  const events = useMemo(
+    () => (filterFn ? allEvents.filter(filterFn) : allEvents),
+    [allEvents, filterFn],
+  );
 
   useEffect(() => {
     if (allEvents.length === 0) {
@@ -65,6 +68,7 @@ export const EventGrid = ({ onSelectionChanged, filterFn, readonly = false }: Ev
         <AgGridReact
           theme={myTheme}
           rowData={events}
+          getRowId={(params) => params.data.id}
           columnDefs={columns}
           defaultColDef={{ cellStyle: { textAlign: 'left' } }}
           rowSelection={readonly ? undefined : { mode: 'multiRow' }}

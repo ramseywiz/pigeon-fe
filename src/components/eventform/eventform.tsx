@@ -119,11 +119,11 @@ export const EventForm = ({
     const { name, value } = e.target;
     const updated = { ...form, [name]: value };
 
-    if (name === 'startDate' && !form.endDate) {
+    if (name === 'startDate') {
       updated.endDate = value;
     }
 
-    if (name === 'startTime' && !form.endTime) {
+    if (name === 'startTime') {
       updated.endTime = pushTimeBy90Minutes(value);
     }
 

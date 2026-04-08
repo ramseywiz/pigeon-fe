@@ -11,6 +11,7 @@ import {
 import { updateEvent } from '../../store/eventSlice';
 import type { EventDto } from '../../api/events/eventDto';
 import { getEventFormErrors } from '../../lib/eventValidation';
+import { useNotification } from '../../notifications/useNotification';
 
 interface EditEventDialogProps {
   open: boolean;
@@ -27,6 +28,7 @@ const hasChanges = (form: EventFormState, event: EventDto): boolean => {
 
 export const EditEventDialog = ({ open, onClose, event }: EditEventDialogProps) => {
   const dispatch = useAppDispatch();
+  const { notify } = useNotification();
   const [form, setForm] = useState<EventFormState>(formStateFromDto(event));
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const errors = getEventFormErrors(form);
@@ -36,20 +38,24 @@ export const EditEventDialog = ({ open, onClose, event }: EditEventDialogProps) 
   }, [event]);
 
   const handleSubmit = async () => {
-    try {
-      if (!hasChanges(form, event)) {
-        onClose();
-        return;
-      }
-      setSubmitAttempted(true);
-      if (Object.keys(errors).length > 0) return;
-
+    if (!hasChanges(form, event)) {
       onClose();
+      return;
+    }
+    setSubmitAttempted(true);
+    if (Object.keys(errors).length > 0) return;
+
+    const name = event.eventName;
+    onClose();
+
+    const resolve = notify(`Saving "${name}"...`);
+    try {
       await dispatch(updateEvent({ id: event.id, form })).unwrap();
       setForm(defaultFormState);
       setSubmitAttempted(false);
-    } catch (err) {
-      console.error('Failed to update event:', err);
+      resolve('success', `Saved "${name}" successfully!`);
+    } catch {
+      resolve('error', `Failed to save "${name}".`);
     }
   };
 
