@@ -45,6 +45,7 @@ export const EditEventDialog = ({ open, onClose, event }: EditEventDialogProps) 
       await dispatch(updateEvent({ id: event.id, form })).unwrap();
       onClose();
       setForm(defaultFormState);
+      setSubmitAttempted(false);
     } catch (err) {
       console.error('Failed to update event:', err);
     }

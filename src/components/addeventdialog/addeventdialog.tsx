@@ -23,6 +23,8 @@ export const AddEventDialog = ({ open, onClose }: AddEventDialogProps) => {
 
       await dispatch(addEvent(form)).unwrap();
       onClose();
+      setForm(defaultFormState);
+      setSubmitAttempted(false);
     } catch (err) {
       console.error('Failed to create event:', err);
     }
