@@ -6,8 +6,8 @@ import styles from './eventpagelayout.module.css';
 import { Navbar } from '../navbar/navbar';
 
 const NAV_LINKS = [
-  { label: 'Event List', to: '/app' },
-  { label: 'Archive', to: '/app/archive' },
+  { label: 'Event List', to: '/events' },
+  { label: 'Archive', to: '/archive' },
 ];
 
 interface EventPageLayoutProps {

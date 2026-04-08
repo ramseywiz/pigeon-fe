@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/login/page';
-import { AppPage } from './pages/app/page';
+import { AppPage } from './pages/events/page';
 import { ArchivePage } from './pages/archive/page';
 import { AllCommunityModule } from 'ag-grid-community';
 import { AgGridProvider } from 'ag-grid-react';
@@ -15,8 +15,8 @@ function App() {
       <AgGridProvider modules={modules}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/app" element={<AppPage />} />
-          <Route path="/app/archive" element={<ArchivePage />} />
+          <Route path="/events" element={<AppPage />} />
+          <Route path="/archive" element={<ArchivePage />} />
         </Routes>
         <NotificationContainer />
       </AgGridProvider>
