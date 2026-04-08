@@ -1,0 +1,49 @@
+.btn {
+  border: none;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  line-height: 1;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.md {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.sm {
+  padding: 9px 20px;
+  font-size: 15px;
+}
+
+.primary {
+  background: var(--text-h);
+  color: var(--bg);
+}
+
+.danger {
+  background: #c0392b;
+  color: #fff;
+}
+
+.ghost {
+  background: #faf8f4;
+  color: var(--text-h);
+  border: 1.5px solid var(--border);
+}
+
+.ghost:hover {
+  background: var(--border);
+  opacity: 1;
+}

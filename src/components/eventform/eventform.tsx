@@ -1,7 +1,23 @@
 import { useState, useEffect } from 'react';
 import styles from './eventform.module.css';
+import { ImageViewer } from '../imageviewer/imageviewer';
 import type { EventDto } from '../../api/events/eventDto';
 import type { EventFormErrors } from '../../lib/eventValidation';
+
+const ExpandIcon = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 14 14"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9" />
+  </svg>
+);
 
 export interface EventFormState {
   eventName: string;
@@ -84,6 +100,7 @@ export const EventForm = ({
 }: EventFormProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [touched, setTouched] = useState<TouchedFields>({});
+  const [imageViewerOpen, setImageViewerOpen] = useState(false);
 
   useEffect(() => {
     if (!form.image) {
@@ -268,26 +285,50 @@ export const EventForm = ({
 
       <div className={styles.field}>
         <label className={styles.label}>Event Flyer</label>
-        <label className={styles.uploadArea}>
-          {previewUrl ? (
-            <div className={styles.uploadPreview}>
-              <img src={previewUrl} alt="preview" className={styles.previewImg} />
-              <span className={styles.uploadFileName}>{form.image?.name ?? 'Current flyer'}</span>
-            </div>
-          ) : (
-            <div className={styles.uploadPlaceholder}>
-              <span>Click to upload an image</span>
-            </div>
+        <div className={styles.uploadWrapper}>
+          <label className={styles.uploadArea}>
+            {previewUrl ? (
+              <div className={styles.uploadPreview}>
+                <img src={previewUrl} alt="preview" className={styles.previewImg} />
+                <span className={styles.uploadFileName}>{form.image?.name ?? 'Current flyer'}</span>
+              </div>
+            ) : (
+              <div className={styles.uploadPlaceholder}>
+                <span>Click to upload an image</span>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFile}
+              className={styles.hiddenInput}
+            />
+          </label>
+          {previewUrl && (
+            <button
+              type="button"
+              className={styles.expandBtn}
+              onClick={(e) => {
+                e.preventDefault();
+                setImageViewerOpen(true);
+              }}
+              title="View full image"
+            >
+              <ExpandIcon />
+            </button>
           )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFile}
-            className={styles.hiddenInput}
-          />
-        </label>
+        </div>
         {errorFor('image') && <span className={styles.errorText}>{errorFor('image')}</span>}
       </div>
+
+      {previewUrl && (
+        <ImageViewer
+          open={imageViewerOpen}
+          onClose={() => setImageViewerOpen(false)}
+          src={previewUrl}
+          alt={form.image?.name ?? 'Event flyer'}
+        />
+      )}
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import styles from './addeventdialog.module.css';
+import { Dialog } from '../dialog/dialog';
+import { Button } from '../ui/button';
 import { useAppDispatch } from '../../store/hooks';
 import { addEvent } from '../../store/eventSlice';
 import { defaultFormState, EventForm, type EventFormState } from '../eventform/eventform';
@@ -13,56 +14,44 @@ interface AddEventDialogProps {
 export const AddEventDialog = ({ open, onClose }: AddEventDialogProps) => {
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<EventFormState>(defaultFormState);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const errors = getEventFormErrors(form);
 
-  const [submitAttempted, setSubmitAttempted] = useState(false);
+  const handleClose = () => {
+    onClose();
+    setForm(defaultFormState);
+    setSubmitAttempted(false);
+  };
 
   const handleSubmit = async () => {
     try {
       setSubmitAttempted(true);
       if (Object.keys(errors).length > 0) return;
-      onClose();
 
+      handleClose();
       await dispatch(addEvent(form)).unwrap();
-      setForm(defaultFormState);
-      setSubmitAttempted(false);
     } catch (err) {
       console.error('Failed to create event:', err);
     }
   };
 
-  if (!open) return null;
-
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.dialogHeader}>
-          <h2 className={styles.title}>Add Event</h2>
-        </div>
-        <div className={styles.dialogBody}>
-          <EventForm
-            form={form}
-            onChange={setForm}
-            errors={errors}
-            submitAttempted={submitAttempted}
-          />
-        </div>
-        <div className={styles.actions}>
-          <button
-            className={styles.cancelBtn}
-            onClick={() => {
-              onClose();
-              setForm(defaultFormState);
-              setSubmitAttempted(false);
-            }}
-          >
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      title="Add Event"
+      footer={
+        <>
+          <Button variant="ghost" size="sm" onClick={handleClose}>
             Cancel
-          </button>
-          <button className={styles.submitBtn} onClick={handleSubmit}>
+          </Button>
+          <Button variant="primary" size="sm" onClick={handleSubmit}>
             Add Event
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </>
+      }
+    >
+      <EventForm form={form} onChange={setForm} errors={errors} submitAttempted={submitAttempted} />
+    </Dialog>
   );
 };
