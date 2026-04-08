@@ -13,13 +13,25 @@
   background: var(--text-h);
   color: #faf8f4;
   padding: 13px 18px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-family: var(--sans);
   font-weight: 400;
+  letter-spacing: 0.01em;
   min-width: 240px;
   max-width: 360px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-left: 4px solid transparent;
   animation: slideIn 0.2s ease forwards;
+}
+
+.pending {
+  border-left-color: #f5c518;
+}
+.success {
+  border-left-color: #2ecc71;
+}
+.error {
+  border-left-color: #e74c3c;
 }
 
 .dismissing {
