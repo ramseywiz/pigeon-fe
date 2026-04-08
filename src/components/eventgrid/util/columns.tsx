@@ -33,6 +33,8 @@ export const useColumns = (onEdit: (event: EventDto) => void) => {
         field: 'startDate',
         headerName: 'Start Date & Time',
         flex: 1,
+        sortable: true,
+        sort: 'asc',
         valueFormatter: (params) => {
           if (!params.value) return '';
           return new Intl.DateTimeFormat('en-US', {
@@ -41,7 +43,7 @@ export const useColumns = (onEdit: (event: EventDto) => void) => {
             year: 'numeric',
             hour: 'numeric',
             minute: '2-digit',
-          }).format(new Date(`${params.value}T${params.data?.startTime}`));
+          }).format(new Date(`${params.value}T${params.data?.startTime}Z`));
         },
       },
       {

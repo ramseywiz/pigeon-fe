@@ -1,5 +1,5 @@
 .leftnav {
-  width: 300px;
+  width: 220px;
   min-height: calc(100svh - 64px);
   background: var(--text-h);
   border-right: 1.5px solid rgba(0, 0, 0, 0.18);
@@ -15,7 +15,7 @@
 }
 
 .open {
-  width: 300px;
+  width: 220px;
   padding: 24px 0;
 }
 

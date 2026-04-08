@@ -31,19 +31,32 @@ export const defaultFormState: EventFormState = {
   imageUrl: null,
 };
 
-export const formStateFromDto = (event: EventDto): EventFormState => ({
-  eventName: event.eventName,
-  startDate: event.startDate,
-  startTime: event.startTime,
-  endDate: event.endDate,
-  endTime: event.endTime,
-  location: event.location,
-  branch: event.branch,
-  description: event.description,
-  food: event.food,
-  image: null,
-  imageUrl: event.imageUrl,
-});
+const toLocalTime = (date: string, time: string): { date: string; time: string } => {
+  const normalizedTime = time.length === 8 ? time : `${time}:00`;
+  const utc = new Date(`${date}T${normalizedTime}Z`);
+  const localDate = utc.toLocaleDateString('en-CA'); // YYYY-MM-DD
+  const localTime = utc.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); // HH:MM
+  return { date: localDate, time: localTime };
+};
+
+export const formStateFromDto = (event: EventDto): EventFormState => {
+  const start = toLocalTime(event.startDate, event.startTime);
+  const end = toLocalTime(event.endDate, event.endTime);
+
+  return {
+    eventName: event.eventName,
+    startDate: start.date,
+    startTime: start.time,
+    endDate: end.date,
+    endTime: end.time,
+    location: event.location,
+    branch: event.branch,
+    description: event.description,
+    food: event.food,
+    image: null,
+    imageUrl: event.imageUrl,
+  };
+};
 
 type TouchedFields = Partial<Record<keyof EventFormState, boolean>>;
 

@@ -42,8 +42,10 @@ export const EditEventDialog = ({ open, onClose, event }: EditEventDialogProps) 
       }
       setSubmitAttempted(true);
       if (Object.keys(errors).length > 0) return;
-      await dispatch(updateEvent({ id: event.id, form })).unwrap();
+
       onClose();
+
+      await dispatch(updateEvent({ id: event.id, form })).unwrap();
       setForm(defaultFormState);
       setSubmitAttempted(false);
     } catch (err) {

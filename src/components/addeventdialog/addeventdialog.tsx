@@ -14,15 +14,16 @@ export const AddEventDialog = ({ open, onClose }: AddEventDialogProps) => {
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<EventFormState>(defaultFormState);
   const errors = getEventFormErrors(form);
+
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
   const handleSubmit = async () => {
     try {
       setSubmitAttempted(true);
       if (Object.keys(errors).length > 0) return;
+      onClose();
 
       await dispatch(addEvent(form)).unwrap();
-      onClose();
       setForm(defaultFormState);
       setSubmitAttempted(false);
     } catch (err) {
