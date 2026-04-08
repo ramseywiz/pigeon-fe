@@ -13,7 +13,6 @@
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -24,7 +23,6 @@
     opacity: 0;
     transform: translateY(-12px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -44,10 +42,11 @@
   overflow: hidden;
 }
 
-.dialogHeader {
+.header {
   background: #e4dfd2;
   padding: 20px 28px;
   border-bottom: 1.5px solid var(--border);
+  flex-shrink: 0;
 }
 
 .title {
@@ -58,7 +57,7 @@
   line-height: 1;
 }
 
-.dialogBody {
+.body {
   padding: 24px 28px;
   display: flex;
   flex-direction: column;
@@ -66,43 +65,12 @@
   overflow-y: auto;
 }
 
-.actions {
+.footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 28px;
   border-top: 1.5px solid var(--border);
   background: #e4dfd2;
-}
-
-.cancelBtn {
-  padding: 9px 20px;
-  border-radius: 6px;
-  border: 1.5px solid var(--border);
-  background: #faf8f4;
-  color: var(--text-h);
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 15px;
-  font-family: var(--sans);
-}
-
-.cancelBtn:hover {
-  background: var(--border);
-}
-
-.submitBtn {
-  padding: 9px 20px;
-  border-radius: 6px;
-  border: none;
-  background: var(--text-h);
-  color: var(--bg);
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 15px;
-  font-family: var(--sans);
-}
-
-.submitBtn:hover {
-  opacity: 0.85;
+  flex-shrink: 0;
 }

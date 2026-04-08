@@ -10,4 +10,5 @@ export interface EventDto {
   description: string;
   food: boolean;
   imageUrl: string | null;
+  archived: boolean;
 }

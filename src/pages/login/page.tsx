@@ -17,7 +17,7 @@ export const LoginPage = () => {
       } = await supabase.auth.getSession();
 
       if (session) {
-        navigate('/app', { replace: true });
+        navigate('/events', { replace: true });
       }
     };
 
@@ -38,7 +38,7 @@ export const LoginPage = () => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        navigate('/app', { replace: true });
+        navigate('/events', { replace: true });
       }
     });
 

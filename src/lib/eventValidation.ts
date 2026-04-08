@@ -13,6 +13,11 @@ export function getEventFormErrors(form: EventFormState): EventFormErrors {
 
   if (!form.startDate) {
     errors.startDate = 'Start date is required.';
+  } else {
+    const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD in local time
+    if (form.startDate < today) {
+      errors.startDate = 'Start date cannot be in the past.';
+    }
   }
 
   if (!form.startTime) {

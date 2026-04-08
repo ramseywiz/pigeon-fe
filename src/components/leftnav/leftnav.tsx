@@ -1,8 +1,11 @@
+import { Fragment } from 'react';
 import styles from './leftnav.module.css';
 import { NavLink } from 'react-router-dom';
 
+type LeftNavLink = { label: string; to: string };
+
 type LeftNavProps = {
-  links: { label: string; to: string }[];
+  links: LeftNavLink[];
   open: boolean;
 };
 
@@ -10,9 +13,8 @@ export const LeftNav = ({ links, open }: LeftNavProps) => {
   return (
     <nav className={`${styles.leftnav} ${open ? styles.open : styles.closed}`}>
       {links.map(({ label, to }, i) => (
-        <>
+        <Fragment key={to}>
           <NavLink
-            key={to}
             to={to}
             end
             className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}
@@ -20,7 +22,7 @@ export const LeftNav = ({ links, open }: LeftNavProps) => {
             {label}
           </NavLink>
           {i < links.length - 1 && <hr className={styles.separator} />}
-        </>
+        </Fragment>
       ))}
     </nav>
   );
