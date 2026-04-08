@@ -1,14 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuthGuard } from '../../hooks/useAuthGuard';
-import { LeftNav } from '../leftnav/leftnav';
+import type { ReactNode } from 'react';
 import styles from './eventpagelayout.module.css';
-import { Navbar } from '../navbar/navbar';
-
-const NAV_LINKS = [
-  { label: 'Event List', to: '/events' },
-  { label: 'Archive', to: '/archive' },
-];
 
 interface EventPageLayoutProps {
   title: string;
@@ -16,28 +7,12 @@ interface EventPageLayoutProps {
   children: ReactNode;
 }
 
-export const EventPageLayout = ({ title, actions, children }: EventPageLayoutProps) => {
-  const { loading, isAuthed } = useAuthGuard();
-  const [navOpen, setNavOpen] = useState(true);
-
-  if (loading) return <p>Loading...</p>;
-  if (!isAuthed) return <Navigate to="/" replace />;
-
-  return (
-    <>
-      <Navbar onHamburger={() => setNavOpen((o) => !o)} />
-      <div className={styles.pageBody}>
-        <LeftNav open={navOpen} links={NAV_LINKS} />
-        <div className={styles.appContainer}>
-          <div className={styles.card}>
-            <div className={styles.cardHeader}>
-              <h1 className={styles.cardTitle}>{title}</h1>
-              {actions && <div className={styles.headerActions}>{actions}</div>}
-            </div>
-            <div className={styles.cardBody}>{children}</div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+export const EventPageLayout = ({ title, actions, children }: EventPageLayoutProps) => (
+  <div className={styles.card}>
+    <div className={styles.cardHeader}>
+      <h1 className={styles.cardTitle}>{title}</h1>
+      {actions && <div className={styles.headerActions}>{actions}</div>}
+    </div>
+    <div className={styles.cardBody}>{children}</div>
+  </div>
+);

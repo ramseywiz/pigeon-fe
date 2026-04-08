@@ -6,7 +6,15 @@ interface NotificationItemProps {
 }
 
 export const NotificationItem = ({ notification }: NotificationItemProps) => (
-  <div className={`${styles.toast} ${notification.dismissing ? styles.dismissing : ''}`}>
+  <div
+    className={[
+      styles.toast,
+      styles[notification.status],
+      notification.dismissing ? styles.dismissing : '',
+    ]
+      .filter(Boolean)
+      .join(' ')}
+  >
     {notification.message}
   </div>
 );

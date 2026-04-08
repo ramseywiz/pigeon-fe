@@ -6,6 +6,7 @@ import { AllCommunityModule } from 'ag-grid-community';
 import { AgGridProvider } from 'ag-grid-react';
 import { NotificationProvider } from './notifications/NotificationProvider';
 import { NotificationContainer } from './notifications/NotificationContainer';
+import { ProtectedLayout } from './components/protectedlayout/ProtectedLayout';
 
 const modules = [AllCommunityModule];
 
@@ -15,8 +16,10 @@ function App() {
       <AgGridProvider modules={modules}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/events" element={<AppPage />} />
-          <Route path="/archive" element={<ArchivePage />} />
+          <Route element={<ProtectedLayout />}>
+            <Route path="/events" element={<AppPage />} />
+            <Route path="/archive" element={<ArchivePage />} />
+          </Route>
         </Routes>
         <NotificationContainer />
       </AgGridProvider>
