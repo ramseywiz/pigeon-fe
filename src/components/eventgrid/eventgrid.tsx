@@ -31,7 +31,11 @@ const myTheme = themeQuartz.withParams({
   headerColumnResizeHandleColor: '#755540',
 });
 
-export const EventGrid = () => {
+interface EventGridProps {
+  onSelectionChanged?: (rows: EventDto[]) => void;
+}
+
+export const EventGrid = ({ onSelectionChanged }: EventGridProps) => {
   const dispatch = useAppDispatch();
   const events = useAppSelector(selectEvents);
   const loading = useAppSelector(selectEventsLoading);
@@ -58,6 +62,8 @@ export const EventGrid = () => {
           rowData={events}
           columnDefs={columns}
           defaultColDef={{ cellStyle: { textAlign: 'left' } }}
+          rowSelection={{ mode: 'multiRow' }}
+          onSelectionChanged={(e) => onSelectionChanged?.(e.api.getSelectedRows())}
         />
       </div>
       {selectedEvent && (

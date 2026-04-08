@@ -23,7 +23,9 @@ const uploadImage = async (image: File, authHeader: string): Promise<string> => 
 };
 
 const toUtcTime = (date: string, time: string): { date: string; time: string } => {
-  const local = new Date(`${date}T${time}:00`);
+  // frustrating: the api returned HH:MM:SS but the frontend does HH:MM -.-
+  const normalizedTime = time.length === 8 ? time : `${time}:00`;
+  const local = new Date(`${date}T${normalizedTime}`);
   const utcDate = local.toISOString().split('T')[0];
   const utcTime = local.toISOString().split('T')[1].substring(0, 5);
   return { date: utcDate, time: utcTime };
@@ -94,4 +96,14 @@ export const updateEvent = async (id: string, form: EventFormState): Promise<Eve
 
   if (!response.ok) throw new Error('Failed to update event');
   return response.json();
+};
+
+export const deleteEvents = async (ids: string[]): Promise<void> => {
+  const headers = await getAuthHeader();
+  const response = await fetch(`${API_URL}/api/events`, {
+    method: 'DELETE',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify(ids),
+  });
+  if (!response.ok) throw new Error('Failed to delete events');
 };
