@@ -14,21 +14,21 @@ import type { EventDto } from '../../api/events/eventDto';
 import { EditEventDialog } from '../editeventdialog/editeventdialog';
 
 const myTheme = themeQuartz.withParams({
-  borderColor: '#d4cdc2',
+  borderColor: '#D9D9D9',
   rowBorder: true,
   borderRadius: 0,
   wrapperBorderRadius: 0,
-  backgroundColor: '#ffffff',
-  headerBackgroundColor: '#f5f2eb',
-  oddRowBackgroundColor: '#faf8f4',
-  rowHoverColor: '#f0ece3',
-  foregroundColor: '#4a3526',
-  headerTextColor: '#4a3526',
+  backgroundColor: '#FFFFFF',
+  headerBackgroundColor: '#F0F0F0',
+  oddRowBackgroundColor: '#FAFAFA',
+  rowHoverColor: '#E8E8E8',
+  foregroundColor: '#131313',
+  headerTextColor: '#840B1F',
   fontFamily: "system-ui, 'Segoe UI', Roboto, sans-serif",
   fontSize: 15,
-  inputBorder: '#d4cdc2',
-  iconColor: '#755540',
-  headerColumnResizeHandleColor: '#755540',
+  inputBorder: '#D9D9D9',
+  iconColor: '#C80F2E',
+  headerColumnResizeHandleColor: '#C80F2E',
 });
 
 interface EventGridProps {

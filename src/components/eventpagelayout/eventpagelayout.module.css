@@ -2,10 +2,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  border: 1.5px solid #d4cdc2;
+  border: 1.5px solid var(--border);
   overflow: hidden;
   min-width: 0;
-  background: #ebe7db;
+  background: var(--color-surface);
 }
 
 .cardHeader {
@@ -13,9 +13,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 28px;
-  border-bottom: 1.5px solid #d4cdc2;
+  border-bottom: 1.5px solid var(--border);
   flex-shrink: 0;
-  background: #e4dfd2;
+  background: var(--color-surface-alt);
 }
 
 .cardTitle {

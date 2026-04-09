@@ -1,5 +1,5 @@
 import styles from './page.module.css';
-import logo from '../../assets/pigeon_dark.png';
+import logo from '../../assets/pigeon_red.png';
 import google from '../../assets/google.png';
 import { supabase } from '../../lib/supabase';
 import { useEffect, useState } from 'react';

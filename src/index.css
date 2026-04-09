@@ -5,16 +5,37 @@
 }
 
 :root {
-  --text: #755540;
-  --text-h: #4a3526;
-  --bg: #f2efe5;
-  --border: #e6e1d6;
-  --code-bg: #ece7db;
-  --accent: #f8c1e1;
-  --accent-bg: rgba(248, 193, 225, 0.15);
-  --accent-border: rgba(248, 193, 225, 0.5);
-  --social-bg: rgba(236, 231, 219, 0.6);
-  --shadow: rgba(117, 85, 64, 0.15) 0 10px 15px -3px, rgba(117, 85, 64, 0.08) 0 4px 6px -2px;
+  --color-cougar-red: #c80f2e;
+  --color-tower-of-cheyenne: #840b1f;
+
+  --color-light-gray: #d9d9d9;
+  --color-bright-white: #ffffff;
+  --color-dark-slate: #131313;
+
+  --color-cyber-blue: #00b2ff;
+  --color-developer-purple: #7554f6;
+  --color-cyber-shadow: #0d74a0;
+  --color-night-mode: #3f2c8c;
+  --color-tutoring-green: #13ce67;
+  --color-late-night-cram: #0d743b;
+
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f5;
+  --color-surface-hover: var(--color-light-gray);
+
+  --color-brand-overlay: rgba(132, 11, 31, 0.65);
+  --color-brand-overlay-strong: rgba(132, 11, 31, 0.9);
+
+  --text: var(--color-cougar-red);
+  --text-h: var(--color-tower-of-cheyenne);
+  --bg: var(--color-bright-white);
+  --border: var(--color-light-gray);
+  --code-bg: var(--color-surface-alt);
+  --accent: var(--color-cougar-red);
+  --accent-bg: rgba(200, 15, 46, 0.08);
+  --accent-border: rgba(200, 15, 46, 0.3);
+  --social-bg: rgba(217, 217, 217, 0.4);
+  --shadow: rgba(132, 11, 31, 0.15) 0 10px 15px -3px, rgba(132, 11, 31, 0.08) 0 4px 6px -2px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
