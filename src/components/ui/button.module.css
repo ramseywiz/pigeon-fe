@@ -33,12 +33,12 @@
 }
 
 .danger {
-  background: #c0392b;
-  color: #fff;
+  background: var(--color-cougar-red);
+  color: var(--color-bright-white);
 }
 
 .ghost {
-  background: #faf8f4;
+  background: var(--color-surface);
   color: var(--text-h);
   border: 1.5px solid var(--border);
 }

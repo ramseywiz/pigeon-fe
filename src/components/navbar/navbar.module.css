@@ -38,7 +38,6 @@
 .hamburgerIcon,
 .logoutIcon {
   display: block;
-  filter: invert(86%) sepia(3%) saturate(1762%) hue-rotate(324deg) brightness(118%) contrast(90%);
 }
 
 .hamburgerIcon {

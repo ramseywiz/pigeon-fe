@@ -2,11 +2,12 @@ import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { useMemo } from 'react';
 import type { EventDto } from '../../../api/events/eventDto';
 
+// Branch pill colors — tinted from the CougarCS brand palette (index.css)
 const BRANCH_STYLES: Record<string, { background: string; color: string }> = {
-  Main: { background: '#fde8e8', color: '#a93226' },
-  InfoSec: { background: '#e8f0fd', color: '#1a56a0' },
-  WebDev: { background: '#f2e8fd', color: '#6c3aad' },
-  Tutoring: { background: '#e8fdf0', color: '#1e7e46' },
+  Main: { background: 'rgba(200, 15, 46, 0.12)', color: '#840B1F' },
+  InfoSec: { background: 'rgba(0, 178, 255, 0.12)', color: '#0D74A0' },
+  WebDev: { background: 'rgba(117, 84, 246, 0.12)', color: '#3F2C8C' },
+  Tutoring: { background: 'rgba(19, 206, 103, 0.12)', color: '#0D743B' },
 };
 
 const formatDuration = (
@@ -42,7 +43,7 @@ export const useColumns = (onEdit?: (event: EventDto) => void) => {
                 background: 'none',
                 border: 'none',
                 padding: 0,
-                color: '#4a3526',
+                color: '#840B1F', // --color-tower-of-cheyenne
                 cursor: 'pointer',
                 textDecoration: 'underline',
                 fontSize: 'inherit',
