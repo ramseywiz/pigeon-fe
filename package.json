@@ -18,13 +18,18 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
+    "@schedule-x/calendar": "^4.4.0",
+    "@schedule-x/events-service": "^4.4.0",
+    "@schedule-x/react": "^4.1.0",
+    "@schedule-x/theme-default": "^4.4.0",
     "@supabase/supabase-js": "^2.101.1",
     "ag-grid-community": "^35.2.0",
     "ag-grid-react": "^35.2.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.13.2"
+    "react-router-dom": "^7.13.2",
+    "temporal-polyfill": "^0.3.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
