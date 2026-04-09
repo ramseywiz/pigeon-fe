@@ -29,6 +29,7 @@ export const AppPage = () => {
 
     const resolve = notify(`Deleting ${label}...`);
     try {
+      setConfirmDeleteOpen(false);
       await dispatch(deleteEvents(selectedRows.map((r) => r.id))).unwrap();
       setSelectedRows([]);
       setConfirmDeleteOpen(false);
