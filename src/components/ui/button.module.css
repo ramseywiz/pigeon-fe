@@ -47,3 +47,12 @@
   background: var(--border);
   opacity: 1;
 }
+
+.warning {
+  background: #f5a623;
+  color: #1a1a1a;
+}
+
+.warning:hover {
+  opacity: 0.85;
+}
