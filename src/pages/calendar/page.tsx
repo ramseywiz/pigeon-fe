@@ -28,11 +28,11 @@ export const CalendarPage = () => {
     plugins: [eventsService],
     events: [],
     weekOptions: {
-      gridHeight: 500,
+      gridHeight: 600,
     },
     dayBoundaries: {
-      start: '07:00',
-      end: '22:00',
+      start: '10:00',
+      end: '21:00',
     },
   });
 
