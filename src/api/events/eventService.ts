@@ -1,11 +1,12 @@
 import type { EventDto } from './eventDto';
 import type { EventFormState } from '../../components/eventform/eventform';
+import { supabase } from '../../lib/supabase';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const getAuthHeader = async (): Promise<HeadersInit> => {
-  const session = await import('../../lib/supabase').then((m) => m.supabase.auth.getSession());
-  const token = session.data.session?.access_token;
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
   return { Authorization: `Bearer ${token}` };
 };
 
