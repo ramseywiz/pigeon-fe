@@ -7,6 +7,7 @@ import styles from './ProtectedLayout.module.css';
 
 const NAV_LINKS = [
   { label: 'Event List', to: '/events' },
+  { label: 'Calendar', to: '/calendar' },
   { label: 'Archive', to: '/archive' },
 ];
 

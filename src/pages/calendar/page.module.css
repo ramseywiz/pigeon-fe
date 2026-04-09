@@ -1,0 +1,54 @@
+.calendarWrapper {
+  flex: 1;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.calendarWrapper :global(.sx-react-calendar-wrapper) {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+.loading {
+  padding: 24px;
+  color: var(--text);
+}
+
+.calendarWrapper :global(.sx-react-calendar-wrapper) {
+  --sx-color-primary: #c80f2e;
+  --sx-color-on-primary: #ffffff;
+  --sx-color-primary-container: rgba(200, 15, 46, 0.1);
+  --sx-color-on-primary-container: #840b1f;
+
+  --sx-color-background: #ffffff;
+  --sx-color-on-background: #131313;
+  --sx-color-surface: #ffffff;
+  --sx-color-surface-bright: #ffffff;
+  --sx-color-surface-dim: #f0f0f0;
+  --sx-color-surface-container: #f5f5f5;
+  --sx-color-surface-container-low: #ffffff;
+  --sx-color-surface-container-high: #ebebeb;
+  --sx-color-on-surface: #131313;
+  --sx-color-on-surface-variant: #555555;
+
+  --sx-color-outline: #d9d9d9;
+  --sx-color-outline-variant: #d9d9d9;
+
+  --sx-color-secondary: #840b1f;
+  --sx-color-on-secondary: #ffffff;
+  --sx-color-secondary-container: rgba(132, 11, 31, 0.1);
+  --sx-color-on-secondary-container: #840b1f;
+
+  --sx-internal-color-text: #131313;
+  --sx-internal-color-light-gray: #fafafa;
+
+  --sx-font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sx-time-grid-hour-height: 10px;
+}
+
+.calendarWrapper :global(.sx-react-calendar-wrapper *) {
+  border-radius: 0 !important;
+}
