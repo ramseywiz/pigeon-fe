@@ -14,6 +14,33 @@ const toZonedDateTime = (date: string, time: string): Temporal.ZonedDateTime => 
   return Temporal.ZonedDateTime.from(`${date}T${normalizedTime}+00:00[UTC]`);
 };
 
+const BRANCH_CALENDARS = {
+  Main: {
+    colorName: 'branch-main',
+    lightColors: { main: '#840B1F', container: 'rgba(200, 15, 46, 0.15)', onContainer: '#840B1F' },
+  },
+  InfoSec: {
+    colorName: 'branch-infosec',
+    lightColors: { main: '#0D74A0', container: 'rgba(0, 178, 255, 0.15)', onContainer: '#0D74A0' },
+  },
+  WebDev: {
+    colorName: 'branch-webdev',
+    lightColors: { main: '#3F2C8C', container: 'rgba(117, 84, 246, 0.15)', onContainer: '#3F2C8C' },
+  },
+  Tutoring: {
+    colorName: 'branch-tutoring',
+    lightColors: { main: '#0D743B', container: 'rgba(19, 206, 103, 0.15)', onContainer: '#0D743B' },
+  },
+  Archived: {
+    colorName: 'branch-archived',
+    lightColors: {
+      main: '#888888',
+      container: 'rgba(128, 128, 128, 0.15)',
+      onContainer: '#666666',
+    },
+  },
+};
+
 export const CalendarPage = () => {
   const dispatch = useAppDispatch();
   const allEvents = useAppSelector(selectEvents);
@@ -26,6 +53,7 @@ export const CalendarPage = () => {
     timezone: 'America/Chicago',
     defaultView: 'month-grid',
     plugins: [eventsService],
+    calendars: BRANCH_CALENDARS,
     events: [],
     weekOptions: {
       gridHeight: 600,
@@ -43,14 +71,13 @@ export const CalendarPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const calendarEvents = allEvents
-      .filter((e) => !e.archived)
-      .map((e) => ({
-        id: e.id,
-        title: e.eventName,
-        start: toZonedDateTime(e.startDate, e.startTime),
-        end: toZonedDateTime(e.endDate, e.endTime),
-      }));
+    const calendarEvents = allEvents.map((e) => ({
+      id: e.id,
+      title: e.eventName,
+      start: toZonedDateTime(e.startDate, e.startTime),
+      end: toZonedDateTime(e.endDate, e.endTime),
+      calendarId: e.archived ? 'Archived' : e.branch,
+    }));
 
     eventsService.set(calendarEvents);
   }, [allEvents, eventsService]);
