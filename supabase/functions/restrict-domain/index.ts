@@ -8,8 +8,9 @@ import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 Deno.serve(async (req: Request) => {
   const body = await req.json();
   const email = body.user?.email?.toLowerCase().trim() ?? '';
+  const domain = email.split('@')[1];
 
-  if (!email.endsWith('@cougarcs.com')) {
+  if (domain !== 'cougarcs.com') {
     return new Response(
       JSON.stringify({
         error: {

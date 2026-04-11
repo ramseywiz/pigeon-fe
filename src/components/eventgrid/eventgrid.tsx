@@ -12,6 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import type { EventDto } from '../../api/events/eventDto';
 import { EditEventDialog } from '../editeventdialog/editeventdialog';
+import { useEventPolling } from '../../hooks/useEventPolling';
 
 const myTheme = themeQuartz.withParams({
   borderColor: '#D9D9D9',
@@ -44,6 +45,8 @@ export const EventGrid = ({ onSelectionChanged, filterFn, readonly = false }: Ev
   const error = useAppSelector(selectEventsError);
 
   const [selectedEvent, setSelectedEvent] = useState<EventDto | null>(null);
+
+  useEventPolling();
 
   const handleEdit = useCallback((event: EventDto) => setSelectedEvent(event), []);
   const columns = useColumns(readonly ? undefined : handleEdit);
