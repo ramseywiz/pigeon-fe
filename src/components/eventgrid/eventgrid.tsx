@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AgGridReact } from 'ag-grid-react';
 import { themeQuartz } from 'ag-grid-community';
 import styles from './eventgrid.module.css';
@@ -11,7 +12,6 @@ import {
 } from '../../store/eventSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import type { EventDto } from '../../api/events/eventDto';
-import { EditEventDialog } from '../editeventdialog/editeventdialog';
 import { useEventPolling } from '../../hooks/useEventPolling';
 
 const myTheme = themeQuartz.withParams({
@@ -40,15 +40,15 @@ interface EventGridProps {
 
 export const EventGrid = ({ onSelectionChanged, filterFn, readonly = false }: EventGridProps) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const allEvents = useAppSelector(selectEvents);
   const loading = useAppSelector(selectEventsLoading);
   const error = useAppSelector(selectEventsError);
 
-  const [selectedEvent, setSelectedEvent] = useState<EventDto | null>(null);
-
   useEventPolling();
 
-  const handleEdit = useCallback((event: EventDto) => setSelectedEvent(event), []);
+  const handleEdit = useCallback((event: EventDto) => navigate(`/events/${event.id}`), [navigate]);
+
   const columns = useColumns(readonly ? undefined : handleEdit);
 
   const events = useMemo(
@@ -66,25 +66,16 @@ export const EventGrid = ({ onSelectionChanged, filterFn, readonly = false }: Ev
   if (error) return <p>{error}</p>;
 
   return (
-    <>
-      <div className={styles.grid}>
-        <AgGridReact
-          theme={myTheme}
-          rowData={events}
-          getRowId={(params) => params.data.id}
-          columnDefs={columns}
-          defaultColDef={{ cellStyle: { textAlign: 'left' } }}
-          rowSelection={readonly ? undefined : { mode: 'multiRow' }}
-          onSelectionChanged={(e) => onSelectionChanged?.(e.api.getSelectedRows())}
-        />
-      </div>
-      {!readonly && selectedEvent && (
-        <EditEventDialog
-          open={selectedEvent !== null}
-          onClose={() => setSelectedEvent(null)}
-          event={selectedEvent}
-        />
-      )}
-    </>
+    <div className={styles.grid}>
+      <AgGridReact
+        theme={myTheme}
+        rowData={events}
+        getRowId={(params) => params.data.id}
+        columnDefs={columns}
+        defaultColDef={{ cellStyle: { textAlign: 'left' } }}
+        rowSelection={readonly ? undefined : { mode: 'multiRow' }}
+        onSelectionChanged={(e) => onSelectionChanged?.(e.api.getSelectedRows())}
+      />
+    </div>
   );
 };

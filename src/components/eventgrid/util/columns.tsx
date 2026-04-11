@@ -35,27 +35,11 @@ export const useColumns = (onEdit?: (event: EventDto) => void) => {
         headerName: 'Event Name',
         flex: 1,
         filter: true,
-        cellRenderer: (params: ICellRendererParams<EventDto>) =>
-          onEdit ? (
-            <button
-              onClick={() => params.data && onEdit(params.data)}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                color: '#840B1F', // --color-tower-of-cheyenne
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                fontSize: 'inherit',
-                fontFamily: 'inherit',
-                fontWeight: 'inherit',
-              }}
-            >
-              {params.value}
-            </button>
-          ) : (
-            <span>{params.value}</span>
-          ),
+        ...(onEdit && {
+          onCellClicked: (params) => params.data && onEdit(params.data),
+          cellStyle: { cursor: 'pointer', color: '#840B1F', textDecoration: 'underline' },
+        }),
+        cellRenderer: (params: ICellRendererParams<EventDto>) => <span>{params.value}</span>,
       },
       {
         field: 'startDate',
