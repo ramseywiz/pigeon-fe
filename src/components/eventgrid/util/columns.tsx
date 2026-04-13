@@ -4,7 +4,7 @@ import type { EventDto } from '../../../api/events/eventDto';
 
 // Branch pill colors — tinted from the CougarCS brand palette (index.css)
 const BRANCH_STYLES: Record<string, { background: string; color: string }> = {
-  Main: { background: 'rgba(200, 15, 46, 0.12)', color: '#131313' },
+  Main: { background: 'rgba(200, 15, 46, 0.12)', color: '#840B1F' },
   InfoSec: { background: 'rgba(0, 178, 255, 0.12)', color: '#0D74A0' },
   WebDev: { background: 'rgba(117, 84, 246, 0.12)', color: '#3F2C8C' },
   Tutoring: { background: 'rgba(19, 206, 103, 0.12)', color: '#0D743B' },
