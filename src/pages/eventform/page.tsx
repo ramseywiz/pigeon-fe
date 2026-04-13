@@ -7,6 +7,7 @@ import {
   formStateFromDto,
   type EventFormState,
 } from '../../components/eventform/eventform';
+import { AnnouncementPreview } from '../../components/announcementpreview/AnnouncementPreview';
 import { Button } from '../../components/ui/button';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -44,6 +45,7 @@ export const EventFormPage = () => {
     event ? formStateFromDto(event) : defaultFormState,
   );
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const errors = getEventFormErrors(form);
 
@@ -107,6 +109,9 @@ export const EventFormPage = () => {
       <Button variant="ghost" onClick={handleCancel}>
         Cancel
       </Button>
+      <Button variant="ghost" onClick={() => setPreviewOpen(true)}>
+        Preview Announcement
+      </Button>
       <Button variant="primary" onClick={handleSubmit}>
         {isEditMode ? 'Save' : 'Add'}
       </Button>
@@ -115,6 +120,7 @@ export const EventFormPage = () => {
 
   return (
     <EventPageLayout title={isEditMode ? 'Edit Event' : 'Add Event'} actions={actions}>
+      <AnnouncementPreview open={previewOpen} onClose={() => setPreviewOpen(false)} form={form} />
       <div className={styles.formBody}>
         <EventForm
           form={form}
