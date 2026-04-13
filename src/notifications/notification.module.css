@@ -10,7 +10,7 @@
 }
 
 .toast {
-  background: var(--text-h);
+  background: var(--color-tower-of-cheyenne);
   color: var(--color-bright-white);
   padding: 13px 18px;
   font-size: 13.5px;

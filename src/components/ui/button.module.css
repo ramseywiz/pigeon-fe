@@ -28,8 +28,8 @@
 }
 
 .primary {
-  background: var(--text-h);
-  color: var(--bg);
+  background: var(--color-tower-of-cheyenne);
+  color: var(--color-bright-white);
 }
 
 .danger {
