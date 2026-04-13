@@ -20,6 +20,23 @@ const ExpandIcon = () => (
   </svg>
 );
 
+const UploadIcon = () => (
+  <svg
+    width="34"
+    height="34"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.4"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="17 8 12 3 7 8" />
+    <line x1="12" y1="3" x2="12" y2="15" />
+  </svg>
+);
+
 export interface EventFormState {
   eventName: string;
   startDate: string;
@@ -151,91 +168,164 @@ export const EventForm = ({
     [styles.input, errorFor(field) ? styles.inputError : ''].filter(Boolean).join(' ');
 
   return (
-    <>
-      <div className={styles.field}>
-        <label className={styles.label}>Event Name</label>
-        <input
-          className={inputClass('eventName')}
-          name="eventName"
-          value={form.eventName}
-          onChange={handleChange}
-          onBlur={() => handleBlur('eventName')}
-          placeholder="e.g. Nvidia Info Session"
-        />
-        {errorFor('eventName') && <span className={styles.errorText}>{errorFor('eventName')}</span>}
-      </div>
-
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <label className={styles.label}>Start Date</label>
+    <div className={styles.layout}>
+      <div className={styles.imagePanel}>
+        <span className={styles.imagePanelLabel}>Event Flyer</span>
+        <label className={styles.uploadFull}>
+          {previewUrl ? (
+            <img src={previewUrl} alt="flyer preview" className={styles.uploadFullImg} />
+          ) : (
+            <div className={styles.uploadPlaceholder}>
+              <UploadIcon />
+              <span>Click to upload flyer</span>
+            </div>
+          )}
           <input
-            className={inputClass('startDate')}
-            name="startDate"
-            type="date"
-            value={form.startDate}
-            onChange={handleChange}
-            onBlur={() => handleBlur('startDate')}
+            type="file"
+            accept="image/*"
+            onChange={handleFile}
+            className={styles.hiddenInput}
           />
-          {errorFor('startDate') && (
-            <span className={styles.errorText}>{errorFor('startDate')}</span>
+          {previewUrl && (
+            <button
+              type="button"
+              className={styles.expandBtn}
+              onClick={(e) => {
+                e.preventDefault();
+                setImageViewerOpen(true);
+              }}
+              title="View full image"
+            >
+              <ExpandIcon />
+            </button>
+          )}
+        </label>
+
+        {errorFor('image') && <span className={styles.imagePanelError}>{errorFor('image')}</span>}
+      </div>
+      <div className={styles.fieldsPanel}>
+        <div className={styles.field}>
+          <label className={styles.label}>Event Name</label>
+          <input
+            className={inputClass('eventName')}
+            name="eventName"
+            value={form.eventName}
+            onChange={handleChange}
+            onBlur={() => handleBlur('eventName')}
+            placeholder="e.g. Nvidia Info Session"
+          />
+          {errorFor('eventName') && (
+            <span className={styles.errorText}>{errorFor('eventName')}</span>
           )}
         </div>
+
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label className={styles.label}>Start Date</label>
+            <input
+              className={inputClass('startDate')}
+              name="startDate"
+              type="date"
+              value={form.startDate}
+              onChange={handleChange}
+              onBlur={() => handleBlur('startDate')}
+            />
+            {errorFor('startDate') && (
+              <span className={styles.errorText}>{errorFor('startDate')}</span>
+            )}
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Start Time</label>
+            <input
+              className={inputClass('startTime')}
+              name="startTime"
+              type="time"
+              value={form.startTime}
+              onChange={handleChange}
+              onBlur={() => handleBlur('startTime')}
+            />
+            {errorFor('startTime') && (
+              <span className={styles.errorText}>{errorFor('startTime')}</span>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label className={styles.label}>End Date</label>
+            <input
+              className={inputClass('endDate')}
+              name="endDate"
+              type="date"
+              value={form.endDate}
+              onChange={handleChange}
+              onBlur={() => handleBlur('endDate')}
+            />
+            {errorFor('endDate') && <span className={styles.errorText}>{errorFor('endDate')}</span>}
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>End Time</label>
+            <input
+              className={inputClass('endTime')}
+              name="endTime"
+              type="time"
+              value={form.endTime}
+              onChange={handleChange}
+              onBlur={() => handleBlur('endTime')}
+            />
+            {errorFor('endTime') && <span className={styles.errorText}>{errorFor('endTime')}</span>}
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label className={styles.label}>Location</label>
+            <input
+              className={inputClass('location')}
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              onBlur={() => handleBlur('location')}
+              placeholder="e.g. PGH 232"
+            />
+            {errorFor('location') && (
+              <span className={styles.errorText}>{errorFor('location')}</span>
+            )}
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Branch</label>
+            <select
+              className={inputClass('branch')}
+              name="branch"
+              value={form.branch}
+              onChange={handleChange}
+              onBlur={() => handleBlur('branch')}
+            >
+              <option value="">Select a branch</option>
+              <option value="Main">Main</option>
+              <option value="WebDev">WebDev</option>
+              <option value="InfoSec">InfoSec</option>
+              <option value="Tutoring">Tutoring</option>
+            </select>
+            {errorFor('branch') && <span className={styles.errorText}>{errorFor('branch')}</span>}
+          </div>
+        </div>
+
         <div className={styles.field}>
-          <label className={styles.label}>Start Time</label>
-          <input
-            className={inputClass('startTime')}
-            name="startTime"
-            type="time"
-            value={form.startTime}
+          <label className={styles.label}>Description</label>
+          <textarea
+            className={`${inputClass('description')} ${styles.textarea}`}
+            name="description"
+            value={form.description}
             onChange={handleChange}
-            onBlur={() => handleBlur('startTime')}
+            onBlur={() => handleBlur('description')}
+            placeholder="This will show up in the announcement!"
           />
-          {errorFor('startTime') && (
-            <span className={styles.errorText}>{errorFor('startTime')}</span>
+          {errorFor('description') && (
+            <span className={styles.errorText}>{errorFor('description')}</span>
           )}
         </div>
-      </div>
 
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <label className={styles.label}>End Date</label>
-          <input
-            className={inputClass('endDate')}
-            name="endDate"
-            type="date"
-            value={form.endDate}
-            onChange={handleChange}
-            onBlur={() => handleBlur('endDate')}
-          />
-          {errorFor('endDate') && <span className={styles.errorText}>{errorFor('endDate')}</span>}
-        </div>
-        <div className={styles.field}>
-          <label className={styles.label}>End Time</label>
-          <input
-            className={inputClass('endTime')}
-            name="endTime"
-            type="time"
-            value={form.endTime}
-            onChange={handleChange}
-            onBlur={() => handleBlur('endTime')}
-          />
-          {errorFor('endTime') && <span className={styles.errorText}>{errorFor('endTime')}</span>}
-        </div>
-      </div>
-
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <label className={styles.label}>Location</label>
-          <input
-            className={inputClass('location')}
-            name="location"
-            value={form.location}
-            onChange={handleChange}
-            onBlur={() => handleBlur('location')}
-            placeholder="e.g. PGH 232"
-          />
-          {errorFor('location') && <span className={styles.errorText}>{errorFor('location')}</span>}
-        </div>
         <div className={styles.checkboxField}>
           <input
             className={styles.checkbox}
@@ -251,77 +341,6 @@ export const EventForm = ({
         </div>
       </div>
 
-      <div className={styles.field}>
-        <label className={styles.label}>Branch</label>
-        <select
-          className={inputClass('branch')}
-          name="branch"
-          value={form.branch}
-          onChange={handleChange}
-          onBlur={() => handleBlur('branch')}
-        >
-          <option value="">Select a branch</option>
-          <option value="Main">Main</option>
-          <option value="WebDev">WebDev</option>
-          <option value="InfoSec">InfoSec</option>
-          <option value="Tutoring">Tutoring</option>
-        </select>
-        {errorFor('branch') && <span className={styles.errorText}>{errorFor('branch')}</span>}
-      </div>
-
-      <div className={styles.field}>
-        <label className={styles.label}>Description</label>
-        <textarea
-          className={`${inputClass('description')} ${styles.textarea}`}
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          onBlur={() => handleBlur('description')}
-          placeholder="This will show up in the announcement!"
-        />
-        {errorFor('description') && (
-          <span className={styles.errorText}>{errorFor('description')}</span>
-        )}
-      </div>
-
-      <div className={styles.field}>
-        <label className={styles.label}>Event Flyer</label>
-        <div className={styles.uploadWrapper}>
-          <label className={styles.uploadArea}>
-            {previewUrl ? (
-              <div className={styles.uploadPreview}>
-                <img src={previewUrl} alt="preview" className={styles.previewImg} />
-                <span className={styles.uploadFileName}>{form.image?.name ?? 'Current flyer'}</span>
-              </div>
-            ) : (
-              <div className={styles.uploadPlaceholder}>
-                <span>Click to upload an image</span>
-              </div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFile}
-              className={styles.hiddenInput}
-            />
-          </label>
-          {previewUrl && (
-            <button
-              type="button"
-              className={styles.expandBtn}
-              onClick={(e) => {
-                e.preventDefault();
-                setImageViewerOpen(true);
-              }}
-              title="View full image"
-            >
-              <ExpandIcon />
-            </button>
-          )}
-        </div>
-        {errorFor('image') && <span className={styles.errorText}>{errorFor('image')}</span>}
-      </div>
-
       {previewUrl && (
         <ImageViewer
           open={imageViewerOpen}
@@ -330,6 +349,6 @@ export const EventForm = ({
           alt={form.image?.name ?? 'Event flyer'}
         />
       )}
-    </>
+    </div>
   );
 };

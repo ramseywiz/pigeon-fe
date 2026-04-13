@@ -1,6 +1,7 @@
 .navbar {
   height: 64px;
-  background: var(--text);
+  background: var(--color-bright-white);
+  border-bottom: 1.5px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;

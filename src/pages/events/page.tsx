@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { EventPageLayout } from '../../components/eventpagelayout/eventpagelayout';
 import { EventGrid } from '../../components/eventgrid/eventgrid';
-import { AddEventDialog } from '../../components/addeventdialog/addeventdialog';
-import { EditEventDialog } from '../../components/editeventdialog/editeventdialog';
 import { ConfirmActionModal } from '../../components/confirmactionmodal/confirmactionmodal';
 import { Button } from '../../components/ui/button';
 import type { EventDto } from '../../api/events/eventDto';
@@ -12,13 +11,12 @@ import { useNotification } from '../../notifications/useNotification';
 
 export const AppPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { notify } = useNotification();
 
   const filterActive = useCallback((e: EventDto) => !e.archived, []);
 
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
   const [selectedRows, setSelectedRows] = useState<EventDto[]>([]);
   const [deleting, setDeleting] = useState(false);
 
@@ -32,7 +30,6 @@ export const AppPage = () => {
       setConfirmDeleteOpen(false);
       await dispatch(deleteEvents(selectedRows.map((r) => r.id))).unwrap();
       setSelectedRows([]);
-      setConfirmDeleteOpen(false);
       resolve('success', `Deleted ${label} successfully!`);
     } catch {
       resolve('error', `Failed to delete ${label}.`);
@@ -47,7 +44,7 @@ export const AppPage = () => {
   const actions = (
     <>
       {selectedRows.length === 1 && (
-        <Button variant="warning" onClick={() => setEditOpen(true)}>
+        <Button variant="warning" onClick={() => navigate(`/events/${selectedRows[0].id}`)}>
           EDIT
         </Button>
       )}
@@ -56,20 +53,12 @@ export const AppPage = () => {
           {`DELETE (${selectedRows.length})`}
         </Button>
       )}
-      <Button onClick={() => setDialogOpen(true)}>ADD EVENT</Button>
+      <Button onClick={() => navigate('/events/new')}>ADD EVENT</Button>
     </>
   );
 
   return (
     <EventPageLayout title="Event List" actions={actions}>
-      <AddEventDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
-      {selectedRows.length === 1 && (
-        <EditEventDialog
-          open={editOpen}
-          onClose={() => setEditOpen(false)}
-          event={selectedRows[0]}
-        />
-      )}
       <ConfirmActionModal
         open={confirmDeleteOpen}
         onClose={() => setConfirmDeleteOpen(false)}

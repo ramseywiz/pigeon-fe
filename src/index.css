@@ -26,8 +26,8 @@
   --color-brand-overlay: rgba(132, 11, 31, 0.65);
   --color-brand-overlay-strong: rgba(132, 11, 31, 0.9);
 
-  --text: var(--color-cougar-red);
-  --text-h: var(--color-tower-of-cheyenne);
+  --text: var(--color-dark-slate);
+  --text-h: var(--color-dark-slate);
   --bg: var(--color-bright-white);
   --border: var(--color-light-gray);
   --code-bg: var(--color-surface-alt);
