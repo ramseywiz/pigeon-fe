@@ -131,16 +131,22 @@ export const EventForm = ({
     return () => URL.revokeObjectURL(url);
   }, [form.image, form.imageUrl]);
 
-  useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
-      const file = Array.from(e.clipboardData?.files ?? []).find((f) =>
-        f.type.startsWith('image/'),
-      );
-      if (file) onChange({ ...form, image: file });
-    };
-    window.addEventListener('paste', handlePaste);
-    return () => window.removeEventListener('paste', handlePaste);
-  }, [form, onChange]);
+  const handlePasteClick = async () => {
+    try {
+      const items = await navigator.clipboard.read();
+      for (const item of items) {
+        const imageType = item.types.find((t) => t.startsWith('image/'));
+        if (imageType) {
+          const blob = await item.getType(imageType);
+          const file = new File([blob], 'pasted-image', { type: imageType });
+          onChange({ ...form, image: file });
+          break;
+        }
+      }
+    } catch {
+      // clipboard access denied or no image present
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -207,6 +213,9 @@ export const EventForm = ({
                 </button>
               )}
             </label>
+            <button type="button" className={styles.pasteBtn} onClick={handlePasteClick}>
+              Paste
+            </button>
             {errorFor('image') && <span className={styles.errorText}>{errorFor('image')}</span>}
           </div>
 
@@ -347,6 +356,12 @@ export const EventForm = ({
                 placeholder="0.00"
                 value={form.cost}
                 onChange={handleChange}
+                onBlur={() => {
+                  if (form.cost !== '') {
+                    const val = parseFloat(form.cost);
+                    if (!isNaN(val)) onChange({ ...form, cost: val.toFixed(2) });
+                  }
+                }}
                 onInput={(e) => {
                   const input = e.target as HTMLInputElement;
                   const [whole, decimal] = input.value.split('.');
