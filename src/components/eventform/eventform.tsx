@@ -167,8 +167,20 @@ export const EventForm = ({
   const inputClass = (field: keyof EventFormErrors) =>
     [styles.input, errorFor(field) ? styles.inputError : ''].filter(Boolean).join(' ');
 
+  /**
+   * Handles image pasting from clipboard.
+   * @param e `ClipboardEvent` originating from the form's container div.
+   */
+  const handleImgPaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const img = e.clipboardData?.files[0];
+    if (img && img.type.startsWith('image/')) {
+      e.preventDefault();
+      onChange({ ...form, image: img });
+    }
+  };
+
   return (
-    <div className={styles.layout}>
+    <div className={styles.layout} onPaste={handleImgPaste}>
       <div className={styles.imagePanel}>
         <span className={styles.imagePanelLabel}>Event Flyer</span>
         <label className={styles.uploadFull}>
