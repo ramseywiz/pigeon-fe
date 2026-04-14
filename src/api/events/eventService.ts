@@ -61,6 +61,7 @@ export const createEvent = async (form: EventFormState): Promise<EventDto> => {
       branch: form.branch,
       description: form.description,
       food: form.food,
+      cost: form.cost !== '' ? parseFloat(form.cost) : null,
       imageUrl,
     }),
   });
@@ -91,6 +92,7 @@ export const updateEvent = async (id: string, form: EventFormState): Promise<Eve
       branch: form.branch,
       description: form.description,
       food: form.food,
+      cost: form.cost !== '' ? parseFloat(form.cost) : null,
       imageUrl,
     }),
   });
