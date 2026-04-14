@@ -5,7 +5,6 @@ import type { EventDto } from '../../api/events/eventDto';
 import type { EventFormErrors } from '../../lib/eventValidation';
 
 const ExpandIcon = () => (
-  // i copied this svg's text and then never saved it. i cannot find the svg so this will have to do.
   <svg
     width="13"
     height="13"
@@ -22,8 +21,8 @@ const ExpandIcon = () => (
 
 const UploadIcon = () => (
   <svg
-    width="34"
-    height="34"
+    width="28"
+    height="28"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -47,6 +46,7 @@ export interface EventFormState {
   branch: string;
   description: string;
   food: boolean;
+  cost: string;
   image: File | null;
   imageUrl: string | null;
 }
@@ -61,6 +61,7 @@ export const defaultFormState: EventFormState = {
   branch: '',
   description: '',
   food: false,
+  cost: '',
   image: null,
   imageUrl: null,
 };
@@ -68,15 +69,14 @@ export const defaultFormState: EventFormState = {
 const toLocalTime = (date: string, time: string): { date: string; time: string } => {
   const normalizedTime = time.length === 8 ? time : `${time}:00`;
   const utc = new Date(`${date}T${normalizedTime}Z`);
-  const localDate = utc.toLocaleDateString('en-CA'); // YYYY-MM-DD
-  const localTime = utc.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); // HH:MM
+  const localDate = utc.toLocaleDateString('en-CA');
+  const localTime = utc.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   return { date: localDate, time: localTime };
 };
 
 export const formStateFromDto = (event: EventDto): EventFormState => {
   const start = toLocalTime(event.startDate, event.startTime);
   const end = toLocalTime(event.endDate, event.endTime);
-
   return {
     eventName: event.eventName,
     startDate: start.date,
@@ -87,6 +87,7 @@ export const formStateFromDto = (event: EventDto): EventFormState => {
     branch: event.branch,
     description: event.description,
     food: event.food,
+    cost: event.cost !== null && event.cost !== undefined ? String(event.cost) : '',
     image: null,
     imageUrl: event.imageUrl,
   };
@@ -130,20 +131,24 @@ export const EventForm = ({
     return () => URL.revokeObjectURL(url);
   }, [form.image, form.imageUrl]);
 
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const file = Array.from(e.clipboardData?.files ?? []).find((f) =>
+        f.type.startsWith('image/'),
+      );
+      if (file) onChange({ ...form, image: file });
+    };
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [form, onChange]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     const updated = { ...form, [name]: value };
-
-    if (name === 'startDate') {
-      updated.endDate = value;
-    }
-
-    if (name === 'startTime') {
-      updated.endTime = pushTimeBy90Minutes(value);
-    }
-
+    if (name === 'startDate') updated.endDate = value;
+    if (name === 'startTime') updated.endTime = pushTimeBy90Minutes(value);
     onChange(updated);
   };
 
@@ -169,59 +174,88 @@ export const EventForm = ({
 
   return (
     <div className={styles.layout}>
-      <div className={styles.imagePanel}>
-        <span className={styles.imagePanelLabel}>Event Flyer</span>
-        <label className={styles.uploadFull}>
-          {previewUrl ? (
-            <img src={previewUrl} alt="flyer preview" className={styles.uploadFullImg} />
-          ) : (
-            <div className={styles.uploadPlaceholder}>
-              <UploadIcon />
-              <span>Click to upload flyer</span>
-            </div>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFile}
-            className={styles.hiddenInput}
-          />
-          {previewUrl && (
-            <button
-              type="button"
-              className={styles.expandBtn}
-              onClick={(e) => {
-                e.preventDefault();
-                setImageViewerOpen(true);
-              }}
-              title="View full image"
-            >
-              <ExpandIcon />
-            </button>
-          )}
-        </label>
-
-        {errorFor('image') && <span className={styles.imagePanelError}>{errorFor('image')}</span>}
-      </div>
       <div className={styles.fieldsPanel}>
-        <div className={styles.field}>
-          <label className={styles.label}>Event Name</label>
-          <input
-            className={inputClass('eventName')}
-            name="eventName"
-            value={form.eventName}
-            onChange={handleChange}
-            onBlur={() => handleBlur('eventName')}
-            placeholder="e.g. Nvidia Info Session"
-          />
-          {errorFor('eventName') && (
-            <span className={styles.errorText}>{errorFor('eventName')}</span>
-          )}
+        {/* Top row: image square + event name + branch */}
+        <div className={styles.topRow}>
+          <div className={styles.imageBlock}>
+            <label className={styles.uploadSquare}>
+              {previewUrl ? (
+                <img src={previewUrl} alt="flyer preview" className={styles.uploadSquareImg} />
+              ) : (
+                <div className={styles.uploadPlaceholder}>
+                  <UploadIcon />
+                  <span>Flyer</span>
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFile}
+                className={styles.hiddenInput}
+              />
+              {previewUrl && (
+                <button
+                  type="button"
+                  className={styles.expandBtn}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setImageViewerOpen(true);
+                  }}
+                  title="View full image"
+                >
+                  <ExpandIcon />
+                </button>
+              )}
+            </label>
+            {errorFor('image') && <span className={styles.errorText}>{errorFor('image')}</span>}
+          </div>
+
+          <div className={styles.topFields}>
+            <div className={styles.field}>
+              <label className={styles.label}>
+                Event Name <span className={styles.required}>*</span>
+              </label>
+              <input
+                className={`${inputClass('eventName')} ${styles.inputLarge}`}
+                name="eventName"
+                value={form.eventName}
+                onChange={handleChange}
+                onBlur={() => handleBlur('eventName')}
+                placeholder="e.g. Nvidia Info Session"
+              />
+              {errorFor('eventName') && (
+                <span className={styles.errorText}>{errorFor('eventName')}</span>
+              )}
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label}>
+                Branch <span className={styles.required}>*</span>
+              </label>
+              <select
+                className={inputClass('branch')}
+                name="branch"
+                value={form.branch}
+                onChange={handleChange}
+                onBlur={() => handleBlur('branch')}
+              >
+                <option value="">Select a branch</option>
+                <option value="Main">Main</option>
+                <option value="WebDev">WebDev</option>
+                <option value="InfoSec">InfoSec</option>
+                <option value="Tutoring">Tutoring</option>
+              </select>
+              {errorFor('branch') && <span className={styles.errorText}>{errorFor('branch')}</span>}
+            </div>
+          </div>
         </div>
+
+        <div className={styles.divider} />
 
         <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>Start Date</label>
+            <label className={styles.label}>
+              Start Date <span className={styles.required}>*</span>
+            </label>
             <input
               className={inputClass('startDate')}
               name="startDate"
@@ -235,7 +269,9 @@ export const EventForm = ({
             )}
           </div>
           <div className={styles.field}>
-            <label className={styles.label}>Start Time</label>
+            <label className={styles.label}>
+              Start Time <span className={styles.required}>*</span>
+            </label>
             <input
               className={inputClass('startTime')}
               name="startTime"
@@ -252,7 +288,9 @@ export const EventForm = ({
 
         <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>End Date</label>
+            <label className={styles.label}>
+              End Date <span className={styles.required}>*</span>
+            </label>
             <input
               className={inputClass('endDate')}
               name="endDate"
@@ -264,7 +302,9 @@ export const EventForm = ({
             {errorFor('endDate') && <span className={styles.errorText}>{errorFor('endDate')}</span>}
           </div>
           <div className={styles.field}>
-            <label className={styles.label}>End Time</label>
+            <label className={styles.label}>
+              End Time <span className={styles.required}>*</span>
+            </label>
             <input
               className={inputClass('endTime')}
               name="endTime"
@@ -279,7 +319,9 @@ export const EventForm = ({
 
         <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>Location</label>
+            <label className={styles.label}>
+              Location <span className={styles.required}>*</span>
+            </label>
             <input
               className={inputClass('location')}
               name="location"
@@ -293,26 +335,34 @@ export const EventForm = ({
             )}
           </div>
           <div className={styles.field}>
-            <label className={styles.label}>Branch</label>
-            <select
-              className={inputClass('branch')}
-              name="branch"
-              value={form.branch}
-              onChange={handleChange}
-              onBlur={() => handleBlur('branch')}
-            >
-              <option value="">Select a branch</option>
-              <option value="Main">Main</option>
-              <option value="WebDev">WebDev</option>
-              <option value="InfoSec">InfoSec</option>
-              <option value="Tutoring">Tutoring</option>
-            </select>
-            {errorFor('branch') && <span className={styles.errorText}>{errorFor('branch')}</span>}
+            <label className={styles.label}>Cost</label>
+            <div className={styles.currencyWrapper}>
+              <span className={styles.currencySymbol}>$</span>
+              <input
+                className={`${styles.input} ${styles.currencyInput}`}
+                name="cost"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+                value={form.cost}
+                onChange={handleChange}
+                onInput={(e) => {
+                  const input = e.target as HTMLInputElement;
+                  const [whole, decimal] = input.value.split('.');
+                  if (decimal?.length > 2) {
+                    input.value = `${whole}.${decimal.slice(0, 2)}`;
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Description</label>
+          <label className={styles.label}>
+            Description <span className={styles.required}>*</span>
+          </label>
           <textarea
             className={`${inputClass('description')} ${styles.textarea}`}
             name="description"

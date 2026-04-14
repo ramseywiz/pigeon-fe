@@ -9,6 +9,7 @@ export interface EventDto {
   branch: string;
   description: string;
   food: boolean;
+  cost: number | null;
   imageUrl: string | null;
   archived: boolean;
 }
