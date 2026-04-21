@@ -109,7 +109,10 @@ export const EventFormPage = () => {
       <Button variant="ghost" onClick={handleCancel}>
         Cancel
       </Button>
-      <Button variant="ghost" onClick={() => setPreviewOpen(true)}>
+      <Button
+        variant="ghost"
+        onClick={() => (isEditMode ? navigate(`/events/${id}/preview`) : setPreviewOpen(true))}
+      >
         Preview Announcement
       </Button>
       <Button variant="primary" onClick={handleSubmit}>
